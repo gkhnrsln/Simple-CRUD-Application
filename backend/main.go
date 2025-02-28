@@ -2,6 +2,10 @@ package main
 
 import (
 	"gkhnrsln/web-service-gin/controllers"
+	"gkhnrsln/web-service-gin/database"
+	"gkhnrsln/web-service-gin/handlers"
+	"gkhnrsln/web-service-gin/middleware"
+	"log"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -9,6 +13,11 @@ import (
 )
 
 func main() {
+	database.InitDB()
+	if database.DB == nil {
+		log.Fatal("Database connection is nil")
+	}
+
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -20,10 +29,18 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	router.POST("/login", handlers.LoginHandler)
+
 	router.GET("/persons", controllers.GetPersons)
 	router.GET("/persons/:id", controllers.GetPersonByID)
-	router.POST("/persons", controllers.PostPerson)
-	router.PUT("/persons/:id", controllers.UpdatePerson)
-	router.DELETE("/persons/:id", controllers.DeletePerson)
-	router.Run(":8080")
+
+	protected := router.Group("/protected")
+	protected.Use(middleware.JWTMiddleware())
+	{
+		protected.POST("/persons", controllers.PostPerson)
+		protected.PUT("/persons/:id", controllers.UpdatePerson)
+		protected.DELETE("/persons/:id", controllers.DeletePerson)
+	}
+
+	router.Run()
 }
