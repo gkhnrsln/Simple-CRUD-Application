@@ -1,0 +1,31 @@
+import { Component, inject } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../shared/service/auth.service';
+
+@Component({
+  selector: 'app-login',
+  imports: [ReactiveFormsModule],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss'
+})
+export class LoginComponent {
+  private readonly authService = inject(AuthService);
+  loginForm = new FormGroup({
+    userName: new FormControl('Username', {
+      nonNullable: true,
+      validators: Validators.required
+    }),
+    password: new FormControl('Password', {
+      nonNullable: true,
+      validators: Validators.required
+    }),
+  });
+
+
+  onSubmit() {
+    const formValue = this.loginForm.getRawValue();
+    this.authService.login2(formValue.userName, formValue.password).subscribe(token => {
+      console.log('Login successful with token: ', token);
+    });
+  }
+}
