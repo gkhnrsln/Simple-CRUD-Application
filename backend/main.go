@@ -34,7 +34,7 @@ func main() {
 	router.GET("/persons", controllers.GetPersons)
 	router.GET("/persons/:id", controllers.GetPersonByID)
 
-	protected := router.Group("/protected")
+	protected := router.Group("/admin")
 	protected.Use(middleware.JWTMiddleware())
 	{
 		protected.POST("/persons", controllers.PostPerson)
