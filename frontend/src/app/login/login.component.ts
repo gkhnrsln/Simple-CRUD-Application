@@ -24,7 +24,7 @@ export class LoginComponent {
 
   onSubmit() {
     const formValue = this.loginForm.getRawValue();
-    this.authService.login2(formValue.userName, formValue.password).subscribe(token => {
+    this.authService.login(formValue.userName, formValue.password).subscribe(token => {
       console.log('Login successful with token: ', token);
     });
   }
