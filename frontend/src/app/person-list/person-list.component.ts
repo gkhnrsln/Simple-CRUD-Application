@@ -3,6 +3,7 @@ import { PersonService } from "../shared/service/person.service";
 import { PersonListItemComponent } from "../person-list-item/person-list-item.component";
 import { RouterLink } from '@angular/router';
 import { Person } from '../model/person';
+import { LoggedinOnlyDirective } from '../shared/loggedin-only.directive';
 
 @Component({
     selector: 'app-persons',
@@ -11,7 +12,8 @@ import { Person } from '../model/person';
     standalone: true,
     imports: [
       RouterLink,
-      PersonListItemComponent
+      PersonListItemComponent,
+      LoggedinOnlyDirective
     ]
 })
 export class PersonListComponent {
