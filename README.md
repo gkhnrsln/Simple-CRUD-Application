@@ -20,6 +20,10 @@ Run `docker compose up -d`.
 
 ## Planned
 - Search/Filter Function
+- Unit Tests (Backend / Frontend)
+- E2E Tests with Cypress
+- Animations(?)
+- Accessibility
 
 ## Demo
 Live Demo on GitHub Pages: https://gkhnrsln.github.io/Simple-CRUD-Application (Only Frontend)
