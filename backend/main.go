@@ -34,13 +34,9 @@ func main() {
 	router.GET("/persons", controllers.GetPersons)
 	router.GET("/persons/:id", controllers.GetPersonByID)
 
-	protected := router.Group("/admin")
-	protected.Use(middleware.JWTMiddleware())
-	{
-		protected.POST("/persons", controllers.PostPerson)
-		protected.PUT("/persons/:id", controllers.UpdatePerson)
-		protected.DELETE("/persons/:id", controllers.DeletePerson)
-	}
+	router.PUT("/persons/:id", middleware.JWTMiddleware(), controllers.UpdatePerson)
+	router.POST("/persons", middleware.JWTMiddleware(), controllers.PostPerson)
+	router.DELETE("/persons/:id", middleware.JWTMiddleware(), controllers.DeletePerson)
 
 	router.Run()
 }
