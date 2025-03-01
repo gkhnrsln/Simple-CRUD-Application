@@ -12,6 +12,13 @@ export class AuthService {
   private readonly _isAuthenticated$ = new BehaviorSubject(false);
   readonly isAuthenticated$ = this._isAuthenticated$.asObservable(); 
 
+  constructor() {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      this._isAuthenticated$.next(true);
+    }
+  }
+
   login(username: string, password: string): Observable<any> {
     return this.http.post<{token: string}>(`${this.apiUrl}/login`, {username, password}).pipe(
       tap(response => {
