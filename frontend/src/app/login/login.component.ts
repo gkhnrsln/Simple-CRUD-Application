@@ -10,6 +10,7 @@ import { AuthService } from '../shared/service/auth.service';
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);
+  
   loginForm = new FormGroup({
     userName: new FormControl('Username', {
       nonNullable: true,

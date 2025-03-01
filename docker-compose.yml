@@ -19,6 +19,9 @@ services:
       - "8080:8080"
     networks:
       - app-network
+    depends_on:
+      - db
+
 
   db:
     image: mariadb:latest
@@ -33,7 +36,6 @@ services:
       MYSQL_PASSWORD: password
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-
 
 networks:
   app-network:
