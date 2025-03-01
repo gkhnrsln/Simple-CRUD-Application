@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/">Simple CRUD Application</a>
@@ -8,6 +7,13 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-link" routerLink="persons" routerLinkActive="active">Persons</a>
+        </div>
+        <div class="navbar-nav ms-auto">
+          @if (!auth.isAuthenticated) {
+            <app-login></app-login>
+          } @else {
+            <a class="btn btn-danger" (click)="auth.logout()">Logout</a>
+          }
         </div>
       </div>
     </div>
