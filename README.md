@@ -3,8 +3,12 @@ This project is a simple CRUD application that allows users to create, read, upd
 
 - **Frontend**: Angular, Bootstrap
 - **Backend**: Go, Gin Framework
+- **Database**: MariaDB
 - **Containerization**: Docker
-
+ 
+| User  | Password  |
+|---|---|
+| `Admin`  | `AdminPass`  |
 
 ## How to Run
 ### Prerequisites
@@ -15,7 +19,6 @@ Make sure you have the following installed on your system:
 Run `docker compose up -d`.
 
 ## Planned
-- Authentification (JWT)
 - Search/Filter Function
 
 ## Demo
