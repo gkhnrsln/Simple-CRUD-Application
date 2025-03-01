@@ -1,5 +1,6 @@
 <h1 class="mt-5">{{title}}</h1>
-<button class="btn btn-primary" [routerLink]="['/admin/create']">Add New Person</button>
+
+<button class="btn btn-primary" *appLoggedinOnly [routerLink]="['/admin/create']">Add New Person</button>
 
 @if (persons()) {
   <div class="container">
@@ -26,5 +27,5 @@
   </div>  
 }
 @else {
-  No Persons available...
+  Loading...
 }
