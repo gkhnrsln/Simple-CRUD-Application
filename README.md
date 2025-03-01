@@ -20,6 +20,7 @@ Run `docker compose up -d`.
 
 ## Planned
 - Search/Filter Function
+- Form Validation
 - Unit Tests (Backend / Frontend)
 - E2E Tests with Cypress
 - Animations(?)
