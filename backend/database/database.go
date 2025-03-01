@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -21,13 +22,17 @@ func InitDB() {
 		AllowNativePasswords: true,
 	}
 	var err error
-	DB, err = sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	if err := DB.Ping(); err != nil {
-		log.Fatal(err)
+	for range 5 {
+		DB, err = sql.Open("mysql", cfg.FormatDSN())
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if err := DB.Ping(); err != nil {
+			fmt.Println(err)
+		}
+		time.Sleep(5 * time.Second)
 	}
 
 	fmt.Println("Connected!")
