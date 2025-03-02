@@ -5,7 +5,9 @@ This project is a simple CRUD application that allows users to create, read, upd
 - **Backend**: Go, Gin Framework
 - **Database**: MariaDB
 - **Containerization**: Docker
- 
+
+**Demo-Login-Credentials**
+
 | User  | Password  |
 |---|---|
 | `Admin`  | `AdminPass`  |
