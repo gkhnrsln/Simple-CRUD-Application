@@ -28,4 +28,11 @@ describe('LoggedinOnlyDirective', () => {
     authState$.next(false);
     expect(viewContainerRef.clear).toHaveBeenCalled();
   });
+
+  it('should clean up subscriptions on destroy', () => {
+    const spy = spyOn(authState$, 'unsubscribe');
+    directive.ngOnDestroy();
+    directive['destroy$'].complete();
+    expect(spy).not.toHaveBeenCalled();
+  });
 });
