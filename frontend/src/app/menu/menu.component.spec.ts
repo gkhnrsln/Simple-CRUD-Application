@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MenuComponent } from './menu.component';
 import { provideRouter } from '@angular/router';
+import { LoginComponent } from '../login/login.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('MenuComponent', () => {
   let component: MenuComponent;
@@ -9,8 +11,8 @@ describe('MenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenuComponent],
-      providers: [provideRouter([])]
+      imports: [MenuComponent, LoginComponent],
+      providers: [provideRouter([]), provideHttpClient()]
     })
     .compileComponents();
 
