@@ -6,14 +6,6 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script>
-    (() => {
-      const hours = new Date().getHours();
-      if (hours >= 19 || hours < 7) {
-        document.documentElement.setAttribute('data-bs-theme', 'dark');
-      }
-    })();
-  </script>
 </head>
 <body>
   <app-root></app-root>

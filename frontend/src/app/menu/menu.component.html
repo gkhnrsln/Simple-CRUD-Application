@@ -14,6 +14,9 @@
           } @else {
             <a class="btn btn-danger" (click)="auth.logout()">Logout</a>
           }
+          <button class="btn btn-outline-secondary" (click)="toggleDarkMode()">
+            <i class="bi" [class]="isDarkMode ? 'bi-moon-fill' : 'bi-sun-fill'"></i>
+          </button>
         </div>
       </div>
     </div>
