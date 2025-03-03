@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Person } from 'src/app/model/person';
 import { birthdayValidator } from 'src/app/shared/validators/birthdayValidator';
@@ -12,9 +12,10 @@ import { birthdayValidator } from 'src/app/shared/validators/birthdayValidator';
       ReactiveFormsModule
     ]
 })
-export class PersonFormComponent {
+export class PersonFormComponent implements OnInit {
   @Input() person?: Person;
   @Output() submitPerson = new EventEmitter<Person>();
+  personForm!: FormGroup;
   
   ngOnChanges() :void {
     if (this.person) {
@@ -22,7 +23,8 @@ export class PersonFormComponent {
     }
   }
 
-  personForm = new FormGroup({
+  ngOnInit(): void {
+    this.personForm = new FormGroup({
       firstName: new FormControl('John', {
         nonNullable: true,
         validators: Validators.required
@@ -46,7 +48,23 @@ export class PersonFormComponent {
         nonNullable: true
       }),
     });
-  
+  }
+
+  get firstName() {
+    return this.personForm.get('firstName');
+  }
+
+  get lastName() {
+    return this.personForm.get('lastName');
+  }
+
+  get mail() {
+    return this.personForm.get('mail');
+  }
+
+  get birthday() {
+    return this.personForm.get('birthday');
+  }
 
   onSubmit() {
     const formValue = this.personForm.getRawValue();
