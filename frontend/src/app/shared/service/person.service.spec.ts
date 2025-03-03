@@ -27,8 +27,8 @@ describe('PersonService', () => {
 
   it('should retrieve persons from the API via GET', () => {
     const dummyPersons: Person[] = [
-      { id: 1, firstName: 'John', lastName: 'Doe', birthday: new Date()},
-      { id: 2, firstName: 'Jane', lastName: 'Smith', birthday: new Date() }
+      { id: "1", firstName: 'John', lastName: 'Doe', birthday: new Date()},
+      { id: "2", firstName: 'Jane', lastName: 'Smith', birthday: new Date() }
     ];
 
     service.getAllPersons().subscribe(persons => {
