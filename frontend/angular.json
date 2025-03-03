@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-challenge": {
+    "simple-crud-application": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -77,10 +77,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-challenge:build:production"
+              "buildTarget": "simple-crud-application:build:production"
             },
             "development": {
-              "buildTarget": "angular-challenge:build:development"
+              "buildTarget": "simple-crud-application:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -88,7 +88,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "angular-challenge:build"
+            "buildTarget": "simple-crud-application:build"
           }
         },
         "test": {
