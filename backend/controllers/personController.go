@@ -7,10 +7,10 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strconv"
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 var dataUrl = "assets/persons.json"
@@ -43,15 +43,10 @@ func GetPersons(c *gin.Context) {
 
 func GetPersonByID(c *gin.Context) {
 	id := c.Param("id")
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid ID"})
-		return
-	}
 
-	for _, p := range persons {
-		if p.ID == idInt {
-			c.IndentedJSON(http.StatusOK, p)
+	for _, person := range persons {
+		if person.ID == id {
+			c.IndentedJSON(http.StatusOK, person)
 			return
 		}
 	}
@@ -66,6 +61,8 @@ func PostPerson(c *gin.Context) {
 		return
 	}
 
+	newPerson.ID = uuid.NewString()
+
 	mu.Lock()
 	persons = append(persons, newPerson)
 	mu.Unlock()
@@ -75,14 +72,9 @@ func PostPerson(c *gin.Context) {
 
 func DeletePerson(c *gin.Context) {
 	id := c.Param("id")
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid ID"})
-		return
-	}
 
-	for i, p := range persons {
-		if p.ID == idInt {
+	for i, person := range persons {
+		if person.ID == id {
 			persons = append(persons[:i], persons[i+1:]...)
 			c.IndentedJSON(http.StatusOK, gin.H{"message": "person deleted"})
 			return
@@ -93,11 +85,6 @@ func DeletePerson(c *gin.Context) {
 
 func UpdatePerson(c *gin.Context) {
 	id := c.Param("id")
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid ID"})
-		return
-	}
 
 	var updatedPerson model.Person
 	if err := c.BindJSON(&updatedPerson); err != nil {
@@ -105,8 +92,8 @@ func UpdatePerson(c *gin.Context) {
 		return
 	}
 
-	for i, p := range persons {
-		if p.ID == idInt {
+	for i, person := range persons {
+		if person.ID == id {
 			persons[i] = updatedPerson
 			c.IndentedJSON(http.StatusOK, updatedPerson)
 			return

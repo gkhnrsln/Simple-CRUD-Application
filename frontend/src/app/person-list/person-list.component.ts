@@ -27,7 +27,7 @@ export class PersonListComponent {
     });
   }
 
-  removePerson(id: number) {
+  removePerson(id: string) {
     this.persons.set(this.persons().filter(p => p.id !== id));
   }
 }

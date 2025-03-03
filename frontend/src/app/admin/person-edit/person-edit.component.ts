@@ -22,7 +22,7 @@ export class PersonEditComponent {
   constructor() {
     this.person$ = this.route.paramMap.pipe(
       map(params => params.get('id')!),
-      switchMap(id => this.personService.getPerson(Number(id)))
+      switchMap(id => this.personService.getPerson(id))
     );
   }
 

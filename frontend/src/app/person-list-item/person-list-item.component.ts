@@ -15,9 +15,9 @@ import { LoggedinOnlyDirective } from '../shared/loggedin-only.directive';
 export class PersonListItemComponent {
   private readonly personService = inject(PersonService);
   @Input() person!: Person;
-  @Output() deleted = new EventEmitter<number>();
+  @Output() deleted = new EventEmitter<string>();
 
-  deletePerson(id: number) {
+  deletePerson(id: string) {
     this.personService.deletePerson(id).subscribe(() => {
       this.deleted.emit(this.person.id);
     });
