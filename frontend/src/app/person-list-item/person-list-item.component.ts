@@ -10,7 +10,6 @@ import { LoggedinOnlyDirective } from '../shared/loggedin-only.directive';
   imports: [DatePipe, RouterLink, LoggedinOnlyDirective],
   templateUrl: './person-list-item.component.html',
   styleUrl: './person-list-item.component.scss',
-
 })
 export class PersonListItemComponent {
   private readonly personService = inject(PersonService);

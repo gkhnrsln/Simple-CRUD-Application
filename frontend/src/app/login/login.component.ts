@@ -27,7 +27,7 @@ export class LoginComponent {
   onSubmit() {
     const formValue = this.loginForm.getRawValue();
     this.authService.login(formValue.userName, formValue.password).pipe(
-      catchError(err => {
+      catchError(() => {
         window.alert('Login failed. Please try again.');
         throw of(null);
       })

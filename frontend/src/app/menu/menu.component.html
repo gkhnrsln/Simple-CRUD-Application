@@ -13,7 +13,7 @@
             @if (!auth.isAuthenticated) {
               <app-login></app-login>
             } @else {
-              <a class="btn btn-danger" (click)="auth.logout()">Logout</a>
+              <button class="btn btn-danger" (click)="auth.logout()">Logout</button>
             }
           </div>
           <button class="btn btn-outline-secondary" (click)="toggleDarkMode()">
