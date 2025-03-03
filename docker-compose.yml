@@ -11,7 +11,7 @@ services:
   backend:
     build: ./backend
     environment:
-      SECRET: supersecretkey
+      SECRET: byYimFGhO6c9/vi+aRMfU4F9jP9H1nZkOoVx93ybtN0= # move to AWS Secrets Manager
       DBUSER: user
       DBPASS: password
       DBHOST: db
