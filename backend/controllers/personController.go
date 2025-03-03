@@ -8,12 +8,14 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 )
 
 var dataUrl = "assets/persons.json"
 var persons []model.Person
+var mu sync.Mutex
 
 func init() {
 	file, err := os.Open(dataUrl)
@@ -58,11 +60,16 @@ func GetPersonByID(c *gin.Context) {
 
 func PostPerson(c *gin.Context) {
 	var newPerson model.Person
+
 	if err := c.BindJSON(&newPerson); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	mu.Lock()
 	persons = append(persons, newPerson)
+	mu.Unlock()
+
 	c.IndentedJSON(http.StatusCreated, newPerson)
 }
 
