@@ -15,7 +15,7 @@ This project is a simple CRUD application that allows users to create, read, upd
 ### Images
 <img width="1840" alt="Screenshot 1 - Persons" src="https://github.com/user-attachments/assets/3e44ca2f-66e9-4655-a62d-e8c07de48734" />
 <img width="1840" alt="Screenshot 2 - Person Detail" src="https://github.com/user-attachments/assets/df12dcb6-a77e-4f7b-a308-ed226f57c5ea" />
-
+<img width="1838" alt="Screenshot 3 - Also in Dark Mode" src="https://github.com/user-attachments/assets/ad0f6b40-005a-4b66-ac13-e30de6adbe8c" />
 
 ## How to Run
 ### Prerequisites
