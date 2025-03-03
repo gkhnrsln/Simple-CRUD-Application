@@ -7,13 +7,15 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strconv"
+	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 var dataUrl = "assets/persons.json"
 var persons []model.Person
+var mu sync.Mutex
 
 func init() {
 	file, err := os.Open(dataUrl)
@@ -41,15 +43,10 @@ func GetPersons(c *gin.Context) {
 
 func GetPersonByID(c *gin.Context) {
 	id := c.Param("id")
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid ID"})
-		return
-	}
 
-	for _, p := range persons {
-		if p.ID == idInt {
-			c.IndentedJSON(http.StatusOK, p)
+	for _, person := range persons {
+		if person.ID == id {
+			c.IndentedJSON(http.StatusOK, person)
 			return
 		}
 	}
@@ -58,24 +55,26 @@ func GetPersonByID(c *gin.Context) {
 
 func PostPerson(c *gin.Context) {
 	var newPerson model.Person
+
 	if err := c.BindJSON(&newPerson); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	newPerson.ID = uuid.NewString()
+
+	mu.Lock()
 	persons = append(persons, newPerson)
+	mu.Unlock()
+
 	c.IndentedJSON(http.StatusCreated, newPerson)
 }
 
 func DeletePerson(c *gin.Context) {
 	id := c.Param("id")
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid ID"})
-		return
-	}
 
-	for i, p := range persons {
-		if p.ID == idInt {
+	for i, person := range persons {
+		if person.ID == id {
 			persons = append(persons[:i], persons[i+1:]...)
 			c.IndentedJSON(http.StatusOK, gin.H{"message": "person deleted"})
 			return
@@ -86,11 +85,6 @@ func DeletePerson(c *gin.Context) {
 
 func UpdatePerson(c *gin.Context) {
 	id := c.Param("id")
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid ID"})
-		return
-	}
 
 	var updatedPerson model.Person
 	if err := c.BindJSON(&updatedPerson); err != nil {
@@ -98,8 +92,8 @@ func UpdatePerson(c *gin.Context) {
 		return
 	}
 
-	for i, p := range persons {
-		if p.ID == idInt {
+	for i, person := range persons {
+		if person.ID == id {
 			persons[i] = updatedPerson
 			c.IndentedJSON(http.StatusOK, updatedPerson)
 			return

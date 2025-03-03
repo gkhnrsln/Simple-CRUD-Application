@@ -21,11 +21,11 @@ export class PersonService {
     );
   }
 
-  getPerson(id: number): Observable<Person> {
+  getPerson(id: string): Observable<Person> {
     return this.http.get<Person>(`${this.apiUrl}/persons/${id}`);
   }
 
-  deletePerson(id: number): Observable<unknown> {
+  deletePerson(id: string): Observable<unknown> {
     return this.http.delete(`${this.apiUrl}/persons/${id}`);
   }
 

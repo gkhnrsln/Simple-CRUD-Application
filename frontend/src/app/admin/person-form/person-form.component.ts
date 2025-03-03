@@ -67,7 +67,7 @@ export class PersonFormComponent {
     const formValue = this.personForm.getRawValue();
 
     const newPerson: Person = {
-      id: this.person?.id ?? Date.now(),
+      id: this.person?.id ?? Date.now().toString(),
       ...formValue
     };
     this.submitPerson.emit(newPerson);

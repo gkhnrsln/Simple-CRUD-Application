@@ -15,10 +15,10 @@ export class PersonDetailsComponent {
   private readonly personService = inject(PersonService);
   private readonly route = inject(ActivatedRoute);
 
-  person$: Observable<Person | null>;
+  person$: Observable<Person>;
 
   constructor() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.person$ = this.personService.getPerson(Number(id));
+    const id = this.route.snapshot.paramMap.get('id')!;
+    this.person$ = this.personService.getPerson(id);
   }
 }
