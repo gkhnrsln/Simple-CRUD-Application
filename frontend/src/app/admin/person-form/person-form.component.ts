@@ -1,18 +1,17 @@
-import {Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Person } from 'src/app/model/person';
 import { birthdayValidator } from 'src/app/shared/validators/birthdayValidator';
 
 @Component({
-    selector: 'app-person-form',
-    templateUrl: './person-form.component.html',
-    styleUrls: ['./person-form.component.scss'],
-    standalone: true,
-    imports: [
-      ReactiveFormsModule
-    ]
+  selector: 'app-person-form',
+  templateUrl: './person-form.component.html',
+  styleUrls: ['./person-form.component.scss'],
+  imports: [
+    ReactiveFormsModule
+  ]
 })
-export class PersonFormComponent {
+export class PersonFormComponent implements OnChanges {
   @Input() person?: Person;
   @Output() submitPerson = new EventEmitter<Person>();
 

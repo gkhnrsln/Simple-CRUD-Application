@@ -25,7 +25,7 @@ func LoginHandler(c *gin.Context) {
 	err := database.DB.QueryRow("SELECT password FROM users WHERE user = ?", credentials.Username).Scan(&storedPassword)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
 		}
@@ -34,7 +34,7 @@ func LoginHandler(c *gin.Context) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(storedPassword), []byte(credentials.Password))
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
 		return
 	}
 

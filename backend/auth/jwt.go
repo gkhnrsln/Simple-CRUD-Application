@@ -16,10 +16,13 @@ type Claims struct {
 }
 
 func GenerateToken(username string) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
-	})
+	claims := Claims{
+		Username: username,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 30)),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
@@ -38,6 +41,12 @@ func ValidateToken(tokenString string) error {
 		return err
 	}
 
+	/*
+		claims, ok := token.Claims.(*Claims)
+		if !ok || claims.ExpiresAt.Time.Before(time.Now()) {
+			return fmt.Errorf("token is expired or invalid")
+		}
+	*/
 	if !token.Valid {
 		return fmt.Errorf("invalid token")
 	}

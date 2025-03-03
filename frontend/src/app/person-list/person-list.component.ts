@@ -6,15 +6,14 @@ import { Person } from '../model/person';
 import { LoggedinOnlyDirective } from '../shared/loggedin-only.directive';
 
 @Component({
-    selector: 'app-persons',
-    templateUrl: './person-list.component.html',
-    styleUrls: ['./person-list.component.scss'],
-    standalone: true,
-    imports: [
-      RouterLink,
-      PersonListItemComponent,
-      LoggedinOnlyDirective
-    ]
+  selector: 'app-persons',
+  templateUrl: './person-list.component.html',
+  styleUrls: ['./person-list.component.scss'],
+  imports: [
+    RouterLink,
+    PersonListItemComponent,
+    LoggedinOnlyDirective
+  ]
 })
 export class PersonListComponent {
   private readonly personService = inject(PersonService);
