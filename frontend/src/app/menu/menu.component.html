@@ -9,11 +9,13 @@
           <a class="nav-link" routerLink="persons" routerLinkActive="active">Persons</a>
         </div>
         <div class="navbar-nav ms-auto">
-          @if (!auth.isAuthenticated) {
-            <app-login></app-login>
-          } @else {
-            <a class="btn btn-danger" (click)="auth.logout()">Logout</a>
-          }
+          <div class="container">
+            @if (!auth.isAuthenticated) {
+              <app-login></app-login>
+            } @else {
+              <a class="btn btn-danger" (click)="auth.logout()">Logout</a>
+            }
+          </div>
           <button class="btn btn-outline-secondary" (click)="toggleDarkMode()">
             <i class="bi" [class]="isDarkMode ? 'bi-moon-fill' : 'bi-sun-fill'"></i>
           </button>
