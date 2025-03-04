@@ -18,4 +18,13 @@ describe('AuthService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should log out and remove token', () => {
+    sessionStorage.setItem('token', 'test-token');
+    
+    service.logout();
+
+    expect(sessionStorage.getItem('token')).toBeNull();
+    expect(service.isAuthenticated).toBeFalse();
+  });
 });
