@@ -25,6 +25,10 @@ describe('PersonService', () => {
     service = TestBed.inject(PersonService);
   });
 
+  afterEach(() => {
+    httpMock.verify();
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
@@ -75,9 +79,5 @@ describe('PersonService', () => {
     const request = httpMock.expectOne(`${environment.apiUrl}/persons/1`);
     expect(request.request.method).toBe('PUT');
     request.flush(dummyPersons[0]);
-  });
-
-  afterEach(() => {
-    httpMock.verify();
   });
 });
