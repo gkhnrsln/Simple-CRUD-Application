@@ -33,7 +33,6 @@ describe('AuthService', () => {
     
     service.login('user', 'password').subscribe(response => {
       expect(response).toEqual(mockResponse);
-      expect(sessionStorage.getItem('token')).toBe('test-token');
       expect(service.isAuthenticated).toBeTrue();
     });
     

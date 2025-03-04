@@ -11,6 +11,7 @@ import { catchError, of } from 'rxjs';
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);
+  errorMessage: string | null = null;
 
   loginForm = new FormGroup({
     userName: new FormControl('Username', {
@@ -25,14 +26,18 @@ export class LoginComponent {
 
 
   onSubmit() {
+    if (this.loginForm.invalid) {
+      return;
+    }
+
     const formValue = this.loginForm.getRawValue();
     this.authService.login(formValue.userName, formValue.password).pipe(
       catchError(() => {
-        window.alert('Login failed. Please try again.');
-        throw of(null);
+        this.errorMessage = 'Login failed. Please retry.';
+        return of(null);
       })
-    ).subscribe(token => {
-      console.log('Login successful with token: ', token);
+    ).subscribe(response => {
+      sessionStorage.setItem('token', response!.token);
     });
   }
 }

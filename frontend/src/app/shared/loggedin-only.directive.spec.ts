@@ -21,11 +21,13 @@ describe('LoggedinOnlyDirective', () => {
 
   it('should create an embedded view if authenticated', () => {
     authState$.next(true);
+    
     expect(viewContainerRef.createEmbeddedView).toHaveBeenCalledWith(templateRef);
   });
 
   it('should clear the view if not authenticated', () => {
     authState$.next(false);
+
     expect(viewContainerRef.clear).toHaveBeenCalled();
   });
 
@@ -33,6 +35,7 @@ describe('LoggedinOnlyDirective', () => {
     const spy = spyOn(authState$, 'unsubscribe');
     directive.ngOnDestroy();
     directive['destroy$'].complete();
+
     expect(spy).not.toHaveBeenCalled();
   });
 });

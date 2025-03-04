@@ -21,10 +21,7 @@ export class AuthService {
 
   login(username: string, password: string): Observable<{token: string}> {
     return this.http.post<{token: string}>(`${this.apiUrl}/login`, {username, password}).pipe(
-      tap(response => {
-        sessionStorage.setItem('token', response.token);
-        this._isAuthenticated$.next(true);
-      })
+      tap(() => { this._isAuthenticated$.next(true); })
     );
   }
 

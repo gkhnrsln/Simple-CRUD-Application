@@ -1,10 +1,10 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div class="row g-3 align-items-center">
     <div class="col-md-5">
-      <input type="text" id="userName" formControlName="userName" class="form-control" placeholder="Username">
+      <input type="text" id="userName" formControlName="userName" class="form-control" [class.is-invalid]="errorMessage" placeholder="Username">
     </div>
     <div class="col-md-5">
-      <input type="password" id="password" formControlName="password" class="form-control" placeholder="Password">
+      <input type="password" id="password" formControlName="password" class="form-control" [class.is-invalid]="errorMessage" placeholder="Password">
     </div>
     <div class="col-md-2">
       <button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary w-100">Login</button>
