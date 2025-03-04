@@ -9,6 +9,10 @@ import { environment } from 'src/environments/environment';
 describe('PersonService', () => {
   let service: PersonService;
   let httpMock: HttpTestingController;
+  let dummyPersons: Person[] = [
+    { id: "1", firstName: 'John', lastName: 'Doe', birthday: new Date('2000-01-01')},
+    { id: "2", firstName: 'Jane', lastName: 'Smith', birthday: new Date('2000-01-01') }
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -26,11 +30,6 @@ describe('PersonService', () => {
   });
 
   it('should retrieve persons from the API via GET', () => {
-    const dummyPersons: Person[] = [
-      { id: "1", firstName: 'John', lastName: 'Doe', birthday: new Date()},
-      { id: "2", firstName: 'Jane', lastName: 'Smith', birthday: new Date() }
-    ];
-
     service.getAllPersons().subscribe(persons => {
       expect(persons.length).toBe(2);
       expect(persons).toEqual(dummyPersons);
@@ -39,6 +38,43 @@ describe('PersonService', () => {
     const request = httpMock.expectOne(`${environment.apiUrl}/persons`);
     expect(request.request.method).toBe('GET');
     request.flush(dummyPersons);
+  });
+
+  it('should retrieve person from the API via GET', () => {
+    service.getPerson("1").subscribe(person => {
+      expect(person).toEqual(dummyPersons[0]);
+    })
+
+    const request = httpMock.expectOne(`${environment.apiUrl}/persons/1`);
+    expect(request.request.method).toBe('GET');
+    request.flush(dummyPersons[0]);
+  });
+
+  it('should delete person from the API via DELETE', () => {
+    service.deletePerson("1").subscribe();
+
+    const request = httpMock.expectOne(`${environment.apiUrl}/persons/1`);
+    expect(request.request.method).toBe('DELETE');
+  });
+
+  it('should add person from the API via POST', () => {
+    service.addPerson(dummyPersons[0]).subscribe(person => {
+      expect(person).toEqual(dummyPersons[0]);
+    })
+
+    const request = httpMock.expectOne(`${environment.apiUrl}/persons`);
+    expect(request.request.method).toBe('POST');
+    request.flush(dummyPersons[0]);
+  });
+
+  it('should update person from the API via PUT', () => {
+    service.updatePerson(dummyPersons[0]).subscribe(person => {
+      expect(person).toEqual(dummyPersons[0]);
+    })
+
+    const request = httpMock.expectOne(`${environment.apiUrl}/persons/1`);
+    expect(request.request.method).toBe('PUT');
+    request.flush(dummyPersons[0]);
   });
 
   afterEach(() => {
