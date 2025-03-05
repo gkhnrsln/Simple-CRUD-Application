@@ -25,6 +25,11 @@ Make sure you have the following installed on your system:
 ### Command
 Run `docker compose up -d`.
 
+### Running in your Browser
+Once the Docker containers are successfully built and started, you can access the application in your browser:
+1. Open your browser and navigate to: `http://localhost:4200/Simple-CRUD-Application`
+2. The application should now be available, and you can start interacting with it.
+
 ## Planned
 - Search/Filter Function
 - Form Validation
