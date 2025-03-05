@@ -20,10 +20,29 @@ describe('PersonListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PersonListComponent);
     component = fixture.componentInstance;
+    component.persons.set([{
+      id: '1', firstName: 'John',
+      lastName: 'Doe',
+      birthday: new Date('2000-01-01')
+    }, {
+      id: '2', firstName: 'Alice',
+      lastName: 'Smith',
+      birthday: new Date('2000-01-01')
+    }]);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should remove the person with the given id', () => {
+    component.removePerson('1');
+
+    expect(component.persons()).toEqual([{
+      id: '2', firstName: 'Alice',
+      lastName: 'Smith',
+      birthday: new Date('2000-01-01')
+    }]);
   });
 });
