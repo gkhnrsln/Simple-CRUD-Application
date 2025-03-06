@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { PersonService } from './person.service';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
@@ -9,7 +8,7 @@ import { environment } from 'src/environments/environment';
 describe('PersonService', () => {
   let service: PersonService;
   let httpMock: HttpTestingController;
-  let dummyPersons: Person[] = [
+  const dummyPersons: Person[] = [
     { id: "1", firstName: 'John', lastName: 'Doe', birthday: new Date('2000-01-01')},
     { id: "2", firstName: 'Jane', lastName: 'Smith', birthday: new Date('2000-01-01') }
   ];
