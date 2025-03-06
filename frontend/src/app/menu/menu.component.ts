@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../shared/service/auth.service';
 import { LoginComponent } from "../login/login.component";
+import { AuthService } from '../shared/service/auth.service';
 
 @Component({
   selector: 'app-menu',
