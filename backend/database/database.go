@@ -25,7 +25,7 @@ func InitDB() {
 
 	DB, err = sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Error initializing database:", err)
 	}
 
 	if err := DB.Ping(); err != nil {
