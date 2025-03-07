@@ -1,56 +1,60 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
-	"gkhnrsln/web-service-gin/model"
-	"io"
 	"net/http"
-	"os"
 	"sync"
+	"time"
+	"web-service-gin/database"
+	"web-service-gin/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
-var dataUrl = "assets/persons.json"
-var persons []model.Person
 var mu sync.Mutex
 
-func init() {
-	file, err := os.Open(dataUrl)
-	if err != nil {
-		fmt.Println("Error opening persons.json:", err)
-		return
-	}
-	defer file.Close()
-
-	byteValue, err := io.ReadAll(file)
-	if err != nil {
-		fmt.Println("Error reading persons.json:", err)
-		return
-	}
-
-	err = json.Unmarshal(byteValue, &persons)
-	if err != nil {
-		fmt.Println("Error unmarshalling persons.json:", err)
-	}
-}
-
 func GetPersons(c *gin.Context) {
+	var persons []model.Person
+	rows, err := database.DB.Query("SELECT id, firstname, lastname, birthday, COALESCE(mail, ''), COALESCE(phone, ''), COALESCE(profession, '') FROM persons;")
+	if err != nil {
+		fmt.Println("Error querying persons from databse:", err)
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving persons"})
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var p model.Person
+		err := rows.Scan(&p.ID, &p.Firstname, &p.Lastname, &p.Birthday, &p.Mail, &p.Phone, &p.Profession)
+		if err != nil {
+			fmt.Println("Error scanning row:", err)
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Error processing data"})
+			return
+		}
+		persons = append(persons, p)
+	}
+
+	if err = rows.Err(); err != nil {
+		fmt.Println("Error iterating rows:", err)
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Error reading data"})
+		return
+	}
+
 	c.IndentedJSON(http.StatusOK, persons)
 }
 
 func GetPersonByID(c *gin.Context) {
 	id := c.Param("id")
+	var p model.Person
 
-	for _, person := range persons {
-		if person.ID == id {
-			c.IndentedJSON(http.StatusOK, person)
-			return
-		}
+	err := database.DB.QueryRow("SELECT id, firstname, lastname, birthday, COALESCE(mail, ''), COALESCE(phone, ''), COALESCE(profession, '') FROM persons WHERE id = ?", id).Scan(&p.ID, &p.Firstname, &p.Lastname, &p.Birthday, &p.Mail, &p.Phone, &p.Profession)
+	if err != nil {
+		fmt.Println("Error querying person from databse:", err)
+		return
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "person not found"})
+
+	c.IndentedJSON(http.StatusOK, p)
 }
 
 func PostPerson(c *gin.Context) {
@@ -63,9 +67,30 @@ func PostPerson(c *gin.Context) {
 
 	newPerson.ID = uuid.NewString()
 
+	parsedTime, err := time.Parse(time.RFC3339, newPerson.Birthday)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid date format. Use YYYY-MM-DD"})
+		return
+	}
+	formattedDate := parsedTime.Format("2006-01-02")
+
 	mu.Lock()
-	persons = append(persons, newPerson)
+	_, err = database.DB.Exec("INSERT INTO persons (id, firstname, lastname, birthday, mail, phone, profession) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		newPerson.ID,
+		newPerson.Firstname,
+		newPerson.Lastname,
+		formattedDate,
+		newPerson.Mail,
+		newPerson.Phone,
+		newPerson.Profession,
+	)
 	mu.Unlock()
+
+	if err != nil {
+		fmt.Println("Error inserting person into database:", err)
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Could not insert person"})
+		return
+	}
 
 	c.IndentedJSON(http.StatusCreated, newPerson)
 }
@@ -73,14 +98,16 @@ func PostPerson(c *gin.Context) {
 func DeletePerson(c *gin.Context) {
 	id := c.Param("id")
 
-	for i, person := range persons {
-		if person.ID == id {
-			persons = append(persons[:i], persons[i+1:]...)
-			c.IndentedJSON(http.StatusOK, gin.H{"message": "person deleted"})
-			return
-		}
+	mu.Lock()
+	_, err := database.DB.Exec("DELETE FROM persons WHERE id = ?", id)
+	mu.Unlock()
+
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "error deleting person"})
+		return
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "person not found"})
+
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "person deleted"})
 }
 
 func UpdatePerson(c *gin.Context) {
@@ -91,13 +118,28 @@ func UpdatePerson(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid JSON"})
 		return
 	}
+	mu.Lock()
+	res, err := database.DB.Exec("UPDATE persons SET firstname = ?, lastname = ?, birthday = ?, mail = ?, phone = ?, profession = ? WHERE id = ?",
+		updatedPerson.Firstname,
+		updatedPerson.Lastname,
+		updatedPerson.Birthday,
+		updatedPerson.Mail,
+		updatedPerson.Phone,
+		updatedPerson.Profession,
+		id,
+	)
+	mu.Unlock()
 
-	for i, person := range persons {
-		if person.ID == id {
-			persons[i] = updatedPerson
-			c.IndentedJSON(http.StatusOK, updatedPerson)
-			return
-		}
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "error updating person"})
+		return
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "person not found"})
+
+	rowsAffected, _ := res.RowsAffected()
+	if rowsAffected == 0 {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "person not found"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, updatedPerson)
 }

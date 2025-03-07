@@ -1,4 +1,4 @@
-module gkhnrsln/web-service-gin
+module web-service-gin
 
 go 1.24
 

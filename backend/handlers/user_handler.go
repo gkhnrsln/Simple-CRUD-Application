@@ -2,15 +2,19 @@ package handlers
 
 import (
 	"database/sql"
-	"gkhnrsln/web-service-gin/auth"
-	"gkhnrsln/web-service-gin/database"
+	"log"
 	"net/http"
+	"web-service-gin/auth"
+	"web-service-gin/database"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func LoginHandler(c *gin.Context) {
+	if database.DB == nil {
+		log.Fatal("Database connection is nil")
+	}
 	var credentials struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -22,7 +26,7 @@ func LoginHandler(c *gin.Context) {
 	}
 
 	var storedPassword string
-	err := database.DB.QueryRow("SELECT password FROM users WHERE user = ?", credentials.Username).Scan(&storedPassword)
+	err := database.DB.QueryRow("SELECT password FROM users WHERE username = ?", credentials.Username).Scan(&storedPassword)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
