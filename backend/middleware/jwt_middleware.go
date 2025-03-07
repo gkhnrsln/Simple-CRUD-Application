@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"gkhnrsln/web-service-gin/auth"
 	"net/http"
+	"web-service-gin/auth"
 
 	"github.com/gin-gonic/gin"
 )

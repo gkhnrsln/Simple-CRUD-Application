@@ -1,12 +1,11 @@
 package main
 
 import (
-	"gkhnrsln/web-service-gin/controllers"
-	"gkhnrsln/web-service-gin/database"
-	"gkhnrsln/web-service-gin/handlers"
-	"gkhnrsln/web-service-gin/middleware"
-	"log"
 	"time"
+	"web-service-gin/controllers"
+	"web-service-gin/database"
+	"web-service-gin/handlers"
+	"web-service-gin/middleware"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,9 +13,6 @@ import (
 
 func main() {
 	database.InitDB()
-	if database.DB == nil {
-		log.Fatal("Database connection is nil")
-	}
 
 	router := gin.Default()
 
