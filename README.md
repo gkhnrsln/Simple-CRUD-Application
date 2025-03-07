@@ -33,7 +33,7 @@ Once the Docker containers are successfully built and started, you can access th
 ## Planned
 - Search/Filter Function
 - Form Validation
-- Unit Tests (Backend / Frontend)
+- Unit Tests (Backend)
 - E2E Tests with Cypress
 - Animations(?)
 - Accessibility
