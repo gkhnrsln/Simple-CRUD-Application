@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
-	"sync"
 	"time"
 	"web-service-gin/database"
 	"web-service-gin/model"
@@ -11,8 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
-
-var mu sync.Mutex
 
 func GetPersons(c *gin.Context) {
 	var persons []model.Person
@@ -50,7 +48,12 @@ func GetPersonByID(c *gin.Context) {
 
 	err := database.DB.QueryRow("SELECT id, firstname, lastname, birthday, COALESCE(mail, ''), COALESCE(phone, ''), COALESCE(profession, '') FROM persons WHERE id = ?", id).Scan(&p.ID, &p.Firstname, &p.Lastname, &p.Birthday, &p.Mail, &p.Phone, &p.Profession)
 	if err != nil {
-		fmt.Println("Error querying person from databse:", err)
+		if err == sql.ErrNoRows {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "person not found"})
+		} else {
+			fmt.Println("Error querying person from database:", err)
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving person"})
+		}
 		return
 	}
 
@@ -74,7 +77,6 @@ func PostPerson(c *gin.Context) {
 	}
 	formattedDate := parsedTime.Format("2006-01-02")
 
-	mu.Lock()
 	_, err = database.DB.Exec("INSERT INTO persons (id, firstname, lastname, birthday, mail, phone, profession) VALUES (?, ?, ?, ?, ?, ?, ?)",
 		newPerson.ID,
 		newPerson.Firstname,
@@ -84,7 +86,6 @@ func PostPerson(c *gin.Context) {
 		newPerson.Phone,
 		newPerson.Profession,
 	)
-	mu.Unlock()
 
 	if err != nil {
 		fmt.Println("Error inserting person into database:", err)
@@ -98,9 +99,7 @@ func PostPerson(c *gin.Context) {
 func DeletePerson(c *gin.Context) {
 	id := c.Param("id")
 
-	mu.Lock()
 	_, err := database.DB.Exec("DELETE FROM persons WHERE id = ?", id)
-	mu.Unlock()
 
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "error deleting person"})
@@ -118,7 +117,7 @@ func UpdatePerson(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid JSON"})
 		return
 	}
-	mu.Lock()
+
 	res, err := database.DB.Exec("UPDATE persons SET firstname = ?, lastname = ?, birthday = ?, mail = ?, phone = ?, profession = ? WHERE id = ?",
 		updatedPerson.Firstname,
 		updatedPerson.Lastname,
@@ -128,7 +127,6 @@ func UpdatePerson(c *gin.Context) {
 		updatedPerson.Profession,
 		id,
 	)
-	mu.Unlock()
 
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "error updating person"})
