@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"database/sql"
-	"log"
 	"net/http"
 	"web-service-gin/auth"
 	"web-service-gin/database"
@@ -13,7 +12,8 @@ import (
 
 func LoginHandler(c *gin.Context) {
 	if database.DB == nil {
-		log.Fatal("Database connection is nil")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection failed"})
+		return
 	}
 	var credentials struct {
 		Username string `json:"username"`
@@ -49,4 +49,8 @@ func LoginHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+func RegisterHandler(c *gin.Context) {
+	//TODO Register new User to DB
 }
