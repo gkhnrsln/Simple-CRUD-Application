@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"time"
 	"web-service-gin/controllers"
 	"web-service-gin/database"
@@ -34,5 +35,8 @@ func main() {
 	router.POST("/persons", middleware.JWTMiddleware(), controllers.PostPerson)
 	router.DELETE("/persons/:id", middleware.JWTMiddleware(), controllers.DeletePerson)
 
-	router.Run()
+	err := router.Run()
+	if err != nil {
+		log.Fatal("Server could not start: ", err)
+	}
 }
