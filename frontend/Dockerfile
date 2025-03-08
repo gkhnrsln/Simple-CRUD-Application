@@ -1,7 +1,7 @@
 FROM node:22 AS build
 WORKDIR /usr/src/app
 COPY package*.json package-lock.json ./
-RUN npm install
+RUN npm install --ignore-scripts
 COPY . .
 RUN npm run build
 
