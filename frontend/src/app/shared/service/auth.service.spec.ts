@@ -28,11 +28,15 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should authenticate user on successful login', () => {
+  it('should authenticate user on successful login and add token and username to sessionStorage', () => {
+    const {username, password} = {username: 'user', password: 'password'};
     const mockResponse = { token: 'test-token' };
     
-    service.login('user', 'password').subscribe(response => {
+    service.login(username, password).subscribe(response => {
       expect(response).toEqual(mockResponse);
+      expect(sessionStorage.getItem('token')).toEqual('test-token');
+      expect(sessionStorage.getItem('username')).toEqual('user');
+      expect(service.username).toEqual(username);
       expect(service.isAuthenticated).toBeTrue();
     });
     
@@ -41,12 +45,15 @@ describe('AuthService', () => {
     req.flush(mockResponse);
   });
 
-  it('should log out and remove token', () => {
+  it('should log out and remove token and username from sessionStorage', () => {
     sessionStorage.setItem('token', 'test-token');
+    sessionStorage.setItem('username', 'user');
 
     service.logout();
 
     expect(sessionStorage.getItem('token')).toBeNull();
+    expect(sessionStorage.getItem('username')).toBeNull();
+    expect(service.username).toBeNull();
     expect(service.isAuthenticated).toBeFalse();
   });
 });

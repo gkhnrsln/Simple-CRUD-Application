@@ -44,11 +44,9 @@ describe('LoginComponent', () => {
 
   it('should login on submit', () => {
     authService.login.and.returnValue(of({ token: 'test-token'}));
-    spyOn(console, 'log');
 
     component.onSubmit();
 
     expect(authService.login).toHaveBeenCalledWith('Username', 'Password');
-    expect(sessionStorage.getItem('token')).toBe('test-token');
   });
 });
