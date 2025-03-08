@@ -13,6 +13,9 @@ This project is a simple CRUD application that allows users to create, read, upd
 | `Admin`  | `AdminPass`  |
 
 ### Images
+#### View: Home
+<img width="1832" src="https://github.com/user-attachments/assets/40068626-1736-470a-8748-d42f03e24af8" />
+
 #### View: Table of persons
 <img width="1840" src="https://github.com/user-attachments/assets/4015107c-0bce-4cd9-80d5-31d48d6c33b1" />
 
