@@ -22,3 +22,6 @@ jobs:
       uses: SonarSource/sonarqube-scan-action@v5.0.0 # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: https://sonarcloud.io
+        SONAR_PROJECT_KEY: gkhnrsln_Simple-CRUD-Application
+        SONAR_ORGANIZATION: gkhnrsln
