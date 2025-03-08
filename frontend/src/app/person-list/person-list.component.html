@@ -2,7 +2,7 @@
 
 <button class="btn btn-primary" *appLoggedinOnly [routerLink]="['/admin/create']">Add New Person</button>
 
-@if (persons()) {
+@if (persons().length < 0) {
   <div class="container">
     <div class="left">
       <table class="table">
@@ -25,7 +25,10 @@
       </table>
     </div>
   </div>  
-}
-@else {
-  No Persons.
+} @else {
+  <div class="text-center">
+    <div class="spinner-border">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
 }
