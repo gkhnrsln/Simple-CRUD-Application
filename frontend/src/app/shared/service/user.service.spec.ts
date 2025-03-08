@@ -35,6 +35,6 @@ describe('UserService', () => {
 
     const request = httpMock.expectOne(`${environment.apiUrl}/register`);
     expect(request.request.method).toBe('POST');
-    expect(request.request.body).toEqual({ userName, password})
+    expect(request.request.body).toEqual({ userName, password })
   });
 });
