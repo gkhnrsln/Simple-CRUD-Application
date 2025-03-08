@@ -5,17 +5,20 @@ import { AuthService } from '../shared/service/auth.service';
 import { UserService } from '../shared/service/user.service';
 import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { ToasterService } from '../shared/service/toaster.service';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let authService: jasmine.SpyObj<AuthService>;
   let userService: jasmine.SpyObj<UserService>;
+  let toasterService: jasmine.SpyObj<ToasterService>;
   let router: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
     authService = jasmine.createSpyObj<AuthService>('AuthService', ['login']);
     userService = jasmine.createSpyObj<UserService>('UserService', ['register']);
+    toasterService = jasmine.createSpyObj('ToasterService', ['show'])
     router = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
@@ -24,6 +27,7 @@ describe('RegisterComponent', () => {
         provideHttpClient(),
         { provide: AuthService, useValue: authService },
         { provide: UserService, useValue: userService },
+        { provide: ToasterService, useValue: toasterService },
         { provide: Router, useValue: router }
       ]
     })
@@ -50,6 +54,7 @@ describe('RegisterComponent', () => {
 
     component.onSubmit();
 
+    expect(toasterService.show).toHaveBeenCalledWith('Success', 'You have been registered.');
     expect(userService.register).toHaveBeenCalledWith('testUser', 'StrongP@ss1');
     expect(authService.login).toHaveBeenCalledWith('testUser', 'StrongP@ss1');
     expect(router.navigate).toHaveBeenCalledWith(['/home']);
@@ -61,6 +66,7 @@ describe('RegisterComponent', () => {
 
     component.onSubmit();
 
+    expect(toasterService.show).toHaveBeenCalledWith('Error', 'Username taken');
     expect(component.usernameTakenError).toBe('Username taken');
   });
 
@@ -70,6 +76,7 @@ describe('RegisterComponent', () => {
 
     component.onSubmit();
 
+    expect(toasterService.show).toHaveBeenCalledWith('Error', 'Server error');
     expect(component.errorMessage).toBe('Server error');
   });
 });
