@@ -45,8 +45,7 @@ export class RegisterComponent {
 
     const {userName, password} = this.registerForm.getRawValue();
     this.userService.register(userName, password).subscribe({
-      next: (response) => {
-        console.log('Registration succesful:', response)
+      next: () => {
         this.authService.login(userName, password).subscribe(
           () => {
             this.router.navigate(['/home']);
