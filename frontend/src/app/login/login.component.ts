@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../shared/service/auth.service';
 import { catchError, of } from 'rxjs';
+import { ToasterService } from '../shared/service/toaster.service';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,8 @@ import { catchError, of } from 'rxjs';
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToasterService);
+
   errorMessage: string | null = null;
 
   loginForm = new FormGroup({
@@ -24,7 +27,6 @@ export class LoginComponent {
     }),
   });
 
-
   onSubmit() {
     if (this.loginForm.invalid) {
       return;
@@ -33,10 +35,14 @@ export class LoginComponent {
     const {userName, password} = this.loginForm.getRawValue();
     this.authService.login(userName, password).pipe(
       catchError(err => {
-        this.errorMessage = err;
+        this.errorMessage = err.error.error;
+        this.toastService.show('Error', err.error.error);
         return of(null);
       })
     ).subscribe(response => {
+      if (response) {
+        this.toastService.show('Success', 'Login successful');
+      }
     });
   }
 }

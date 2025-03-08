@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { UserService } from '../shared/service/user.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/service/auth.service';
+import { ToasterService } from '../shared/service/toaster.service';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,7 @@ export class RegisterComponent {
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToasterService);
   private readonly strongPasswordRegx: RegExp = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
   title = 'Register';
   errorMessage: string | null = null;
@@ -46,17 +48,19 @@ export class RegisterComponent {
     const {userName, password} = this.registerForm.getRawValue();
     this.userService.register(userName, password).subscribe({
       next: () => {
+        this.toastService.show('Success', 'You have been registered.');
         this.authService.login(userName, password).subscribe(
           () => {
             this.router.navigate(['/home']);
           }
-        )
+        );
       }, error: (err) => {
         if (err.status === 409) {
           this.usernameTakenError = err.error.error;
+        } else {
+          this.errorMessage = err.error.error;
         }
-        console.error('Registration error:', err)
-        this.errorMessage = err;
+        this.toastService.show('Error', err.error.error);
       }
     });
   }

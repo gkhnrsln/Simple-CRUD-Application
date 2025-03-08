@@ -4,11 +4,13 @@ import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { PersonService } from 'src/app/shared/service/person.service';
 import { of } from 'rxjs';
 import { Person } from 'src/app/model/person';
+import { ToasterService } from 'src/app/shared/service/toaster.service';
 
 describe('PersonEditComponent', () => {
   let component: PersonEditComponent;
   let fixture: ComponentFixture<PersonEditComponent>;
   let personServiceSpy: jasmine.SpyObj<PersonService>;
+  let toasterServiceSpy: jasmine.SpyObj<ToasterService>;
   let routerSpy: jasmine.SpyObj<Router>;
   let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
 
@@ -21,6 +23,7 @@ describe('PersonEditComponent', () => {
   
   beforeEach(async () => {
     personServiceSpy = jasmine.createSpyObj('PersonService', ['getPerson', 'updatePerson']);
+    toasterServiceSpy = jasmine.createSpyObj('ToasterService', ['show']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', [], {
       paramMap: of({ get: () => '1' })
@@ -31,6 +34,7 @@ describe('PersonEditComponent', () => {
       providers: [
         provideRouter([]),
         { provide: PersonService, useValue: personServiceSpy },
+        { provide: ToasterService, useValue: toasterServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: activatedRouteSpy }
       ]
@@ -61,6 +65,7 @@ describe('PersonEditComponent', () => {
     component.update(mockPerson);
 
     expect(personServiceSpy.updatePerson).toHaveBeenCalledWith(mockPerson);
+    expect(toasterServiceSpy.show).toHaveBeenCalledWith('Success', 'Person was updated');
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/persons', mockPerson.id]);
   });
 });

@@ -13,6 +13,9 @@ This project is a simple CRUD application that allows users to create, read, upd
 | `Admin`  | `AdminPass`  |
 
 ### Images
+#### View: Home
+<img width="1832" src="https://github.com/user-attachments/assets/40068626-1736-470a-8748-d42f03e24af8" />
+
 #### View: Table of persons
 <img width="1840" src="https://github.com/user-attachments/assets/4015107c-0bce-4cd9-80d5-31d48d6c33b1" />
 
@@ -23,11 +26,10 @@ This project is a simple CRUD application that allows users to create, read, upd
 <img width="1840" src="https://github.com/user-attachments/assets/a9c1bf74-348f-474c-8861-86516c9f4991" />
 
 #### View: Registration
-<img width="1840" src="https://github.com/user-attachments/assets/c2a6b160-1770-4892-bbe9-2399833147e6" />
+<img width="1832" src="https://github.com/user-attachments/assets/2acd506d-d558-4f17-9693-497bb7999174" />
 
 #### Bonus: Dark Mode enabled
-<img width="1840" alt="Bildschirmfoto 2025-03-08 um 14 31 08" src="https://github.com/user-attachments/assets/caab9341-fd7d-4584-91fd-a64e6b72184f" />
-
+<img width="1840" src="https://github.com/user-attachments/assets/caab9341-fd7d-4584-91fd-a64e6b72184f" />
 
 ## How to Run
 ### Prerequisites

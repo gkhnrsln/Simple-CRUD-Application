@@ -3,22 +3,24 @@ import { LoginComponent } from './login.component';
 import { provideHttpClient } from '@angular/common/http';
 import { AuthService } from '../shared/service/auth.service';
 import { of, throwError } from 'rxjs';
+import { ToasterService } from '../shared/service/toaster.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let authService: jasmine.SpyObj<AuthService>;
+  let toasterService: jasmine.SpyObj<ToasterService>;
 
   beforeEach(async () => {
     authService = jasmine.createSpyObj<AuthService>('AuthService', ['login']);
+    toasterService = jasmine.createSpyObj('ToasterService', ['show']);
 
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
         provideHttpClient(),
-        {
-          provide: AuthService, useValue: authService
-        }
+        { provide: AuthService, useValue: authService },
+        { provide: ToasterService, useValue: toasterService },
       ]
     })
     .compileComponents();
@@ -54,13 +56,15 @@ describe('LoginComponent', () => {
     component.onSubmit();
 
     expect(authService.login).toHaveBeenCalledWith('Username', 'Password');
+    expect(toasterService.show).toHaveBeenCalledWith('Success', 'Login successful');
   });
 
   it('should handle login error', () => {
-    authService.login.and.returnValue(throwError(() => 'Login failed'));
+    authService.login.and.returnValue(throwError(() => ({ status: 500, error: { error: 'Login failed' } })));
 
     component.onSubmit();
 
     expect(component.errorMessage).toBe('Login failed');
+    expect(toasterService.show).toHaveBeenCalledWith('Error', 'Login failed');
   });
 });

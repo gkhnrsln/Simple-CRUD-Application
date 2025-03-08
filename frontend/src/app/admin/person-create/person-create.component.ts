@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { PersonFormComponent } from '../person-form/person-form.component';
 import { PersonService } from 'src/app/shared/service/person.service';
 import { Person } from 'src/app/model/person';
+import { ToasterService } from 'src/app/shared/service/toaster.service';
 
 @Component({
   selector: 'app-person-create',
@@ -12,10 +13,12 @@ import { Person } from 'src/app/model/person';
 })
 export class PersonCreateComponent {
   private readonly personService = inject(PersonService);
+  private readonly toasterService = inject(ToasterService);
   private readonly router = inject(Router);
   
   create(person: Person) {
     this.personService.addPerson(person).subscribe(response => {
+      this.toasterService.show('Success', 'Person was created');
       this.router.navigate(['/persons', response.id]);
     });
   }

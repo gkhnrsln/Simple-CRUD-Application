@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { QuotesService } from '../shared/service/quotes.service';
 import { Observable } from 'rxjs';
 import { Quote } from '../model/quote';
@@ -7,7 +6,7 @@ import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, AsyncPipe],
+  imports: [AsyncPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

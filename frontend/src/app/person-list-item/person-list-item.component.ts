@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { PersonService } from '../shared/service/person.service';
 import { RouterLink } from '@angular/router';
 import { LoggedinOnlyDirective } from '../shared/loggedin-only.directive';
+import { ToasterService } from '../shared/service/toaster.service';
 
 @Component({
   selector: '[app-person-list-item]',
@@ -13,11 +14,13 @@ import { LoggedinOnlyDirective } from '../shared/loggedin-only.directive';
 })
 export class PersonListItemComponent {
   private readonly personService = inject(PersonService);
+  private readonly toasterService = inject(ToasterService);
   @Input() person!: Person;
   @Output() deleted = new EventEmitter<string>();
 
   deletePerson(id: string) {
     this.personService.deletePerson(id).subscribe(() => {
+      this.toasterService.show('Success', `Person with id ${id} was deleted`);
       this.deleted.emit(this.person.id);
     });
   }
