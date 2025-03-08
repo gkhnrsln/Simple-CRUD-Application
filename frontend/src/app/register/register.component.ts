@@ -57,11 +57,10 @@ export class RegisterComponent {
       }, error: (err) => {
         if (err.status === 409) {
           this.usernameTakenError = err.error.error;
-          this.toastService.show('Error', err.error.error);
         } else {
-          this.errorMessage = err;
-          this.toastService.show('Error', err);
+          this.errorMessage = err.error.error;
         }
+        this.toastService.show('Error', err.error.error);
       }
     });
   }

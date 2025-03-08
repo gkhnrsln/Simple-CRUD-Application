@@ -72,7 +72,7 @@ describe('RegisterComponent', () => {
 
   it('should handle generic error', () => {
     component.registerForm.setValue({ userName: 'testUser', password: 'StrongP@ss1' });
-    userService.register.and.returnValue(throwError(() => 'Server error'));
+    userService.register.and.returnValue(throwError(() => ({ status: 500, error: { error: 'Server error' } })));
 
     component.onSubmit();
 
