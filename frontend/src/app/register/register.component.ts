@@ -17,6 +17,7 @@ export class RegisterComponent {
   private readonly strongPasswordRegx: RegExp = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
   title = 'Register';
   errorMessage: string | null = null;
+  usernameTakenError: string | null = null;
 
   registerForm = new FormGroup({
     userName: new FormControl('', {
@@ -52,6 +53,9 @@ export class RegisterComponent {
           }
         )
       }, error: (err) => {
+        if (err.status === 409) {
+          this.usernameTakenError = err.error.error;
+        }
         console.error('Registration error:', err)
         this.errorMessage = err;
       }

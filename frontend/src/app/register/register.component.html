@@ -7,6 +7,11 @@
         <div id="usernameHelpBlock" class="form-text">
             Your username must be at least 3 characters long and can only contain letters (a-z, A-Z) and numbers (0-9). No spaces or special characters allowed.
         </div>
+        @if(usernameTakenError) {
+            <div id="usernameTaken" class="form-text">
+                {{ usernameTakenError }}
+            </div>
+        }
     </div>
     <div class="col-md-12">
         <label for="password">Password</label>
