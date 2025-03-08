@@ -13,9 +13,21 @@ This project is a simple CRUD application that allows users to create, read, upd
 | `Admin`  | `AdminPass`  |
 
 ### Images
-<img width="1840" alt="Screenshot 1 - Persons (Admin View)" src="https://github.com/user-attachments/assets/aa0b23ee-1f9f-455f-8be0-c75fade92824" />
-<img width="1840" alt="Screenshot 2 - Person Detail" src="https://github.com/user-attachments/assets/df12dcb6-a77e-4f7b-a308-ed226f57c5ea" />
-<img width="1838" alt="Screenshot 3 - Also in Dark Mode" src="https://github.com/user-attachments/assets/ad0f6b40-005a-4b66-ac13-e30de6adbe8c" />
+#### View: Table of persons
+<img width="1840" src="https://github.com/user-attachments/assets/4015107c-0bce-4cd9-80d5-31d48d6c33b1" />
+
+#### View: Table of persons when logged in
+<img width="1840" src="https://github.com/user-attachments/assets/117783db-dc7f-4f73-a410-caeb416b92a6" />
+
+#### View: Person detail
+<img width="1840" src="https://github.com/user-attachments/assets/a9c1bf74-348f-474c-8861-86516c9f4991" />
+
+#### View: Registration
+<img width="1840" src="https://github.com/user-attachments/assets/c2a6b160-1770-4892-bbe9-2399833147e6" />
+
+#### Bonus: Dark Mode enabled
+<img width="1840" alt="Bildschirmfoto 2025-03-08 um 14 31 08" src="https://github.com/user-attachments/assets/caab9341-fd7d-4584-91fd-a64e6b72184f" />
+
 
 ## How to Run
 ### Prerequisites
