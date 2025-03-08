@@ -27,6 +27,7 @@ func main() {
 	}))
 
 	router.POST("/login", handlers.LoginHandler)
+	router.POST("/register", handlers.RegisterHandler)
 
 	router.GET("/persons", controllers.GetPersons)
 	router.GET("/persons/:id", controllers.GetPersonByID)

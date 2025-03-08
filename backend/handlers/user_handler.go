@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"database/sql"
-	"log"
 	"net/http"
 	"web-service-gin/auth"
 	"web-service-gin/database"
@@ -13,7 +12,8 @@ import (
 
 func LoginHandler(c *gin.Context) {
 	if database.DB == nil {
-		log.Fatal("Database connection is nil")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection failed"})
+		return
 	}
 	var credentials struct {
 		Username string `json:"username"`
@@ -49,4 +49,46 @@ func LoginHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+func RegisterHandler(c *gin.Context) {
+	if database.DB == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection failed"})
+		return
+	}
+
+	var credentials struct {
+		Username string `json:"username" binding:"required,min=3"`
+		Password string `json:"password" binding:"required,min=6"`
+	}
+
+	if err := c.ShouldBindJSON(&credentials); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+
+	var existingUser string
+	err := database.DB.QueryRow("SELECT username FROM users WHERE username = ?", credentials.Username).Scan(&existingUser)
+	if err != nil && err != sql.ErrNoRows {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
+		return
+	}
+	if existingUser != "" {
+		c.JSON(http.StatusConflict, gin.H{"error": "Username already taken"})
+		return
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+		return
+	}
+
+	_, err = database.DB.Exec("INSERT INTO users (username, password) VALUES (?, ?)", credentials.Username, hashedPassword)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to register user"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"message": "User successfully registered"})
 }

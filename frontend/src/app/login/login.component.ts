@@ -30,14 +30,13 @@ export class LoginComponent {
       return;
     }
 
-    const formValue = this.loginForm.getRawValue();
-    this.authService.login(formValue.userName, formValue.password).pipe(
-      catchError(() => {
-        this.errorMessage = 'Login failed. Please retry.';
+    const {userName, password} = this.loginForm.getRawValue();
+    this.authService.login(userName, password).pipe(
+      catchError(err => {
+        this.errorMessage = err;
         return of(null);
       })
     ).subscribe(response => {
-      sessionStorage.setItem('token', response!.token);
     });
   }
 }
