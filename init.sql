@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
-    id         CHAR(36) NOT NULL DEFAULT (UUID()),
+    id         VARCHAR(36) NOT NULL DEFAULT (UUID()),
     username   VARCHAR(128) NOT NULL,
     password   VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
@@ -15,7 +15,7 @@ VALUES
 
 DROP TABLE IF EXISTS persons;
 CREATE TABLE persons (
-    id         CHAR(36) NOT NULL DEFAULT (UUID()),
+    id         VARCHAR(36) NOT NULL DEFAULT (UUID()),
     firstname  VARCHAR(128) NOT NULL,
     lastname   VARCHAR(128) NOT NULL,
     birthday   DATE NOT NULL,
