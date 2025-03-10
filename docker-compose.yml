@@ -7,6 +7,7 @@ services:
       - app-network
     depends_on:
       - backend
+    restart: unless-stopped
 
   backend:
     build: ./backend
@@ -21,8 +22,9 @@ services:
     networks:
       - app-network
     depends_on:
-      - db
-
+      db:
+        condition: service_healthy
+    restart: unless-stopped
 
   db:
     image: mariadb:latest
@@ -36,8 +38,19 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     volumes:
+      - db-data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  db-data:
