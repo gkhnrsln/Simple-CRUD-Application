@@ -17,15 +17,22 @@ import { LoggedinOnlyDirective } from '../shared/loggedin-only.directive';
 })
 export class PersonListComponent {
   private readonly personService = inject(PersonService);
-  title = 'Table of Persons';
   persons = signal<Person[]>([]);
-
+  loading = signal(true);
+  error = signal<string | null>(null);
+  
   constructor() {
-    this.personService.getAllPersons().subscribe((data) => {
-      this.persons.set(data);
+    this.personService.getAllPersons().subscribe({
+      next: data => {
+        this.persons.set(data);
+        this.loading.set(false);
+      },
+      error: err => {
+        this.error.set('Failed to load persons.');
+        this.loading.set(false);
+      }
     });
   }
-
   removePerson(id: string) {
     this.persons.set(this.persons().filter(p => p.id !== id));
   }

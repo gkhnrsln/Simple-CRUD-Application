@@ -1,8 +1,20 @@
-<h1 class="mt-5">{{title}}</h1>
+<h1 class="mt-5">Table of Persons</h1>
 
 <button class="btn btn-primary" *appLoggedinOnly [routerLink]="['/admin/create']">Add New Person</button>
 
-@if (persons()) {
+@if (loading()) {
+  <div class="text-center">
+    <div class="spinner-border">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+} @else if (error()) {
+  Error: {{ error() }}
+} @else if (persons().length === 0) {
+  <div class="alert alert-info">
+    No persons found. Please add a new person.
+  </div>
+} @else {
   <div class="container">
     <div class="left">
       <table class="table">
@@ -24,10 +36,4 @@
       </table>
     </div>
   </div>  
-} @else {
-  <div class="text-center">
-    <div class="spinner-border">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-  </div>
 }
