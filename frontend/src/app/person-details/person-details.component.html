@@ -2,7 +2,7 @@
 
 <button class="btn btn-primary" routerLink="/persons"><i class="bi bi-arrow-return-left"></i> Back to persons</button>
 
-@if (person$ | async; as person) {
+@if (person(); as person) {
     <section>
         <div class="container py-5">
           <div class="row">
@@ -18,7 +18,6 @@
                   </div>
                 </div>
               </div>
-     
             </div>
             <div class="col-lg-8">
               <div class="card mb-4">
@@ -73,8 +72,6 @@
                   </div>
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
@@ -83,4 +80,3 @@
 } @else {
     <p>Person not found</p>
 }
-
