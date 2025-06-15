@@ -13,13 +13,11 @@ export class LoggedinOnlyDirective implements OnDestroy {
               private readonly template: TemplateRef<unknown>) {
     this.authService.isAuthenticated$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(isAuthenticated => {
-        if (isAuthenticated) {
-          this.viewContainer.createEmbeddedView(this.template);
-        } else {
-          this.viewContainer.clear();
-        }
-    });
+      .subscribe(isAuthenticated => this.updateView(isAuthenticated));
+  }
+
+  private updateView(isAuthenticated: boolean): void {
+    isAuthenticated ? this.viewContainer.createEmbeddedView(this.template) : this.viewContainer.clear();
   }
 
   ngOnDestroy(): void {

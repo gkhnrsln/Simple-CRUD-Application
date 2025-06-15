@@ -11,37 +11,48 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly _isAuthenticated$ = new BehaviorSubject(false);
   readonly isAuthenticated$ = this._isAuthenticated$.asObservable();
-  username: string | null = null;
-
+  private _username: string | null = null;
 
   constructor() {
+    this.loadSession();
+  }
+
+  private loadSession(): void {
     const token = sessionStorage.getItem('token');
     const storedUsername = sessionStorage.getItem('username');
     if (token && storedUsername) {
       this._isAuthenticated$.next(true);
-      this.username = storedUsername;
+      this._username = storedUsername;
     }
   }
 
   login(username: string, password: string): Observable<{token: string}> {
     return this.http.post<{token: string}>(`${this.apiUrl}/login`, {username, password}).pipe(
       tap(response => {
-        sessionStorage.setItem('token', response.token);
-        sessionStorage.setItem('username', username);
-        this.username = username;
-        this._isAuthenticated$.next(true); 
+        this.handleLoginSuccess(response.token, username);
       })
     );
   }
 
-  logout() {
+  private handleLoginSuccess(token: string, username: string): void {
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('username', username);
+    this._username = username;
+    this._isAuthenticated$.next(true);
+  }
+
+  logout(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('username');
-    this.username = null;
+    this._username = null;
     this._isAuthenticated$.next(false);
   }
 
-  get isAuthenticated() {
+  get isAuthenticated(): boolean {
     return this._isAuthenticated$.value;
+  }
+
+  get username(): string | null {
+    return this._username;
   }
 }
