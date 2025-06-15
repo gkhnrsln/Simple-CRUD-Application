@@ -1,9 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { Observable } from 'rxjs';
 import { PersonService } from '../shared/service/person.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Person } from '../model/person';
 import { AsyncPipe, DatePipe } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-person-details',
@@ -15,10 +14,10 @@ export class PersonDetailsComponent {
   private readonly personService = inject(PersonService);
   private readonly route = inject(ActivatedRoute);
 
-  person$: Observable<Person>;
-
-  constructor() {
-    const id = this.route.snapshot.paramMap.get('id')!;
-    this.person$ = this.personService.getPerson(id);
-  }
+  person = toSignal(
+    this.personService.getPerson(
+      this.route.snapshot.paramMap.get('id')!
+    ), 
+    { initialValue: null }
+  );
 }

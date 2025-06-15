@@ -5,7 +5,7 @@ export interface Person {
   birthday: Date;
   mail?: string;
   phone?: string;
-  adress?: {
+  address?: {
     street: string;
     zip: number;
     city: string;
