@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { PersonService } from '../shared/service/person.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-person-details',
-  imports: [AsyncPipe, DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink],
   templateUrl: './person-details.component.html',
   styleUrl: './person-details.component.scss'
 })

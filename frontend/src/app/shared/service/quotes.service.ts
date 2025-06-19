@@ -1,6 +1,5 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { httpResource } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Quote } from 'src/app/model/quote';
 import { environment } from 'src/environments/environment';
 
@@ -11,15 +10,16 @@ export class QuotesService {
 
   private readonly apiURL = 'https://api.api-ninjas.com/v1';
   private readonly apiKey = environment.apiKey;
-  
-  private readonly http = inject(HttpClient);
 
-  getQuotes(): Observable<Quote[]> {
-    const headers = new HttpHeaders({
+  /**
+   * Fetches quotes from the API.
+   * 
+   * @returns An observable of an array of Quote objects.
+   */  
+  quotes = httpResource<Quote[]>(() => ({
+    url: `${this.apiURL}/quotes`,
+    headers: {
       'X-Api-Key': this.apiKey
-    });
-
-    return this.http.get<Quote[]>(`${this.apiURL}/quotes`, { headers });
-  }
-
+    },
+  }));
 }

@@ -23,23 +23,25 @@
         <div class="card">
           <div class="card-body">
             <h3 class="card-title">Random Quote</h3>
-            @if (quotes$ | async; as quotes) {
+            @if (quotes.hasValue()) {
                 <figure class="text-center mb-0">
                   <blockquote class="blockquote">
                     <p class="pb-3">
                       <i class="fas fa-quote-left fa-xs text-primary"></i>
-                      <span class="lead font-italic">{{quotes[0].quote}}</span>
+                      <span class="lead font-italic">{{quotes.value()[0].quote}}</span>
                       <i class="fas fa-quote-right fa-xs text-primary"></i>
                     </p>
                   </blockquote>
                   <figcaption class="blockquote-footer mb-0">
-                    {{quotes[0].author}}
+                    {{quotes.value()[0].author}}
                   </figcaption>
                 </figure>
-            } @else {
+            } @else if (quotes.error()) {
+              <div class="text-center">Could not load quotes</div>
+            } @else if (quotes.isLoading()) {
               <div class="text-center">
                 <div class="spinner-border">
-                  <span class="visually-hidden">Loading...</span>
+                  <span class="visually-hidden">Loading quotes...</span>
                 </div>
               </div>
             }
