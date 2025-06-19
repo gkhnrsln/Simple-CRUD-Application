@@ -9,6 +9,7 @@ describe('MenuComponent', () => {
   let fixture: ComponentFixture<MenuComponent>;
 
   beforeEach(async () => {
+    sessionStorage.removeItem('theme');
     await TestBed.configureTestingModule({
       imports: [MenuComponent, LoginComponent],
       providers: [provideRouter([]), provideHttpClient()]
