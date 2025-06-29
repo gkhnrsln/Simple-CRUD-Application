@@ -25,11 +25,11 @@ jobs:
         organization: gkhnrsln
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # SONAR_HOST_URL: https://sonarcloud.io
-        # SONAR_PROJECT_KEY: gkhnrsln_Simple-CRUD-Application
-        # SONAR_ORGANIZATION: gkhnrsln
+        SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+        SONAR_PROJECT_KEY: ${{ vars.gkhnrsln_Simple-CRUD-Application }}
+        SONAR_ORGANIZATION: ${{ vars.ORGANIZATION }}
     - name: Debug SonarQube Variables
       run: |
-        echo "SONAR_HOST_URL=${{ env.SONAR_HOST_URL }}"
-        echo "SONAR_PROJECT_KEY=${{ env.SONAR_PROJECT_KEY }}"
-        echo "SONAR_ORGANIZATION=${{ env.SONAR_ORGANIZATION }}"
+        echo "SONAR_HOST_URL=${{ vars.SONAR_HOST_URL }}"
+        echo "SONAR_PROJECT_KEY=${{ vars.SONAR_PROJECT_KEY }}"
+        echo "SONAR_ORGANIZATION=${{ vars.SONAR_ORGANIZATION }}"
