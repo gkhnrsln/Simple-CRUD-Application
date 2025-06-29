@@ -23,8 +23,8 @@ jobs:
       with:
         projectKey: gkhnrsln_Simple-CRUD-Application
         organization: gkhnrsln
-      #env:
-        # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         # SONAR_HOST_URL: https://sonarcloud.io
         # SONAR_PROJECT_KEY: gkhnrsln_Simple-CRUD-Application
         # SONAR_ORGANIZATION: gkhnrsln
