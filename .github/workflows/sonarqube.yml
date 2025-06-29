@@ -26,7 +26,7 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
-        SONAR_PROJECT_KEY: ${{ vars.gkhnrsln_Simple-CRUD-Application }}
+        SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
         SONAR_ORGANIZATION: ${{ vars.ORGANIZATION }}
     - name: Debug SonarQube Variables
       run: |
