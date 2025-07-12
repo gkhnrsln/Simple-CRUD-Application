@@ -22,11 +22,11 @@ jobs:
       uses: SonarSource/sonarqube-scan-action@v5.2.0 # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: https://sonarcloud.io
-        SONAR_PROJECT_KEY: gkhnrsln_Simple-CRUD-Application
-        SONAR_ORGANIZATION: gkhnrsln
+        SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+        SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
+        SONAR_ORGANIZATION: ${{ vars.ORGANIZATION }}
     - name: Debug SonarQube Variables
       run: |
-        echo "SONAR_HOST_URL=${{ env.SONAR_HOST_URL }}"
-        echo "SONAR_PROJECT_KEY=${{ env.SONAR_PROJECT_KEY }}"
-        echo "SONAR_ORGANIZATION=${{ env.SONAR_ORGANIZATION }}"
+        echo "SONAR_HOST_URL=${{ vars.SONAR_HOST_URL }}"
+        echo "SONAR_PROJECT_KEY=${{ vars.SONAR_PROJECT_KEY }}"
+        echo "SONAR_ORGANIZATION=${{ vars.SONAR_ORGANIZATION }}"
