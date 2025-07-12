@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import {Component, input, output, OnChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Person } from 'src/app/model/person';
 import { birthdayValidator } from 'src/app/shared/validators/birthdayValidator';
@@ -12,12 +12,12 @@ import { birthdayValidator } from 'src/app/shared/validators/birthdayValidator';
   ]
 })
 export class PersonFormComponent implements OnChanges {
-  @Input() person?: Person;
-  @Output() submitPerson = new EventEmitter<Person>();
+  person = input<Person>();
+  submitPerson = output<Person>();
 
   ngOnChanges() :void {
-    if (this.person) {
-      this.setFormValues(this.person);
+    if (this.person()) {
+      this.setFormValues(this.person()!);
     }
   }
 
@@ -66,7 +66,7 @@ export class PersonFormComponent implements OnChanges {
     const formValue = this.personForm.getRawValue();
 
     const newPerson: Person = {
-      id: this.person?.id ?? Date.now().toString(),
+      id: this.person()?.id ?? Date.now().toString(),
       ...formValue
     };
     this.submitPerson.emit(newPerson);
