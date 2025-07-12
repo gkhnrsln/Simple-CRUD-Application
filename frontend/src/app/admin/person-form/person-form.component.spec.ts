@@ -40,7 +40,7 @@ describe('PersonFormComponent', () => {
       phone: '+9876543210'
     };
 
-    component.person = mockPerson;
+    fixture.componentRef.setInput('person', mockPerson);
     component.ngOnChanges();
 
     expect(component.firstName?.value).toBe('Bob');
