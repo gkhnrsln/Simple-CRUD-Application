@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {Component, inject, input, output} from '@angular/core';
 import { Person } from '../model/person';
 import { DatePipe } from '@angular/common';
 import { PersonService } from '../shared/service/person.service';
@@ -15,13 +15,13 @@ import { ToasterService } from '../shared/service/toaster.service';
 export class PersonListItemComponent {
   private readonly personService = inject(PersonService);
   private readonly toasterService = inject(ToasterService);
-  @Input() person!: Person;
-  @Output() deleted = new EventEmitter<string>();
+  readonly person = input.required<Person>();
+  readonly deleted = output<string>();
 
   deletePerson(id: string) {
     this.personService.deletePerson(id).subscribe(() => {
       this.toasterService.show('Success', `Person with id ${id} was deleted`);
-      this.deleted.emit(this.person.id);
+      this.deleted.emit(this.person().id);
     });
   }
 }

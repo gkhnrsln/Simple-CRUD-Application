@@ -1,14 +1,14 @@
-@if (person) {
-    <td>{{ person.firstName }}</td>
-    <td>{{ person.lastName }}</td>
-    <td>{{ person.birthday | date}}</td>
-    <td>{{ person.mail }}</td>
-    <td>{{ person.phone }}</td>
+@if (person()) {
+    <td>{{ person().firstName }}</td>
+    <td>{{ person().lastName }}</td>
+    <td>{{ person().birthday | date}}</td>
+    <td>{{ person().mail }}</td>
+    <td>{{ person().phone }}</td>
     <td>
-        <button class="btn btn-primary" [routerLink]="person.id.toString()">View</button>
+        <button class="btn btn-primary" [routerLink]="person().id.toString()">View</button>
         <ng-container *appLoggedinOnly>
-            &nbsp; <button class="btn btn-outline-primary" [routerLink]="['/admin/edit', person.id]">Edit</button> 
-            &nbsp; <button class="btn btn-danger" (click)="deletePerson(person.id)">Delete</button>
+            &nbsp; <button class="btn btn-outline-primary" [routerLink]="['/admin/edit', person().id]">Edit</button>
+            &nbsp; <button class="btn btn-danger" (click)="deletePerson(person().id)">Delete</button>
         </ng-container>
     </td>
 }

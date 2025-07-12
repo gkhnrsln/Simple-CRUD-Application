@@ -24,14 +24,13 @@ describe('PersonListItemComponent', () => {
         { provide: PersonService, useValue: personServiceSpy },
         { provide: ToasterService, useValue: toasterServiceSpy },
         { provide: ActivatedRoute, useValue: { params: of({ id: '1' }) } },
-  
       ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(PersonListItemComponent);
     component = fixture.componentInstance;
-    component.person = { id: '1', firstName: 'John Doe' , lastName: 'Doe', birthday: new Date('2000-01-01') };
+    fixture.componentRef.setInput('person', { id: '1', firstName: 'John Doe' , lastName: 'Doe', birthday: new Date('2000-01-01') });
     fixture.detectChanges();
   });
 
@@ -44,7 +43,7 @@ describe('PersonListItemComponent', () => {
     personServiceSpy.deletePerson.and.returnValue(of({}));
 
     component.deletePerson('1');
-    
+
     expect(toasterServiceSpy.show).toHaveBeenCalledWith('Success', `Person with id 1 was deleted`);
     expect(personServiceSpy.deletePerson).toHaveBeenCalledWith('1');
     expect(component.deleted.emit).toHaveBeenCalledWith('1');

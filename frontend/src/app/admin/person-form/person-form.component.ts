@@ -12,8 +12,8 @@ import { birthdayValidator } from 'src/app/shared/validators/birthdayValidator';
   ]
 })
 export class PersonFormComponent implements OnChanges {
-  person = input<Person>();
-  submitPerson = output<Person>();
+  readonly person = input<Person | undefined>();
+  readonly submitPerson = output<Person>();
 
   ngOnChanges() :void {
     if (this.person()) {
@@ -33,7 +33,7 @@ export class PersonFormComponent implements OnChanges {
     birthday: new FormControl(new Date(), {
       nonNullable: true,
       validators: [
-        Validators.required, 
+        Validators.required,
         birthdayValidator()
       ]
     }),
@@ -45,7 +45,7 @@ export class PersonFormComponent implements OnChanges {
       nonNullable: true
     }),
   });
-  
+
   get firstName() {
     return this.personForm.get('firstName');
   }
