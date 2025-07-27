@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -9,8 +9,7 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   private readonly apiUrl = environment.apiUrl;
   private readonly http = inject(HttpClient);
-  private readonly _isAuthenticated$ = new BehaviorSubject(false);
-  readonly isAuthenticated$ = this._isAuthenticated$.asObservable();
+  private readonly _isAuthenticated = signal<boolean>(false);
   private _username: string | null = null;
 
   constructor() {
@@ -21,7 +20,7 @@ export class AuthService {
     const token = sessionStorage.getItem('token');
     const storedUsername = sessionStorage.getItem('username');
     if (token && storedUsername) {
-      this._isAuthenticated$.next(true);
+      this._isAuthenticated.set(true);
       this._username = storedUsername;
     }
   }
@@ -38,18 +37,18 @@ export class AuthService {
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('username', username);
     this._username = username;
-    this._isAuthenticated$.next(true);
+    this._isAuthenticated.set(true);
   }
 
   logout(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('username');
     this._username = null;
-    this._isAuthenticated$.next(false);
+    this._isAuthenticated.set(false);
   }
 
   get isAuthenticated(): boolean {
-    return this._isAuthenticated$.value;
+    return this._isAuthenticated();
   }
 
   get username(): string | null {
