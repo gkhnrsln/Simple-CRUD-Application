@@ -2,40 +2,44 @@ import { Subject } from 'rxjs';
 import { LoggedinOnlyDirective } from './loggedin-only.directive';
 import { AuthService } from './service/auth.service';
 import { TemplateRef, ViewContainerRef } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 
 describe('LoggedinOnlyDirective', () => {
-  let directive: LoggedinOnlyDirective;
-  let authService: jasmine.SpyObj<AuthService>;
-  let viewContainerRef: jasmine.SpyObj<ViewContainerRef>;
-  let templateRef: jasmine.SpyObj<TemplateRef<unknown>>;
   let authState$: Subject<boolean>;
+  let viewContainerRefMock: jasmine.SpyObj<ViewContainerRef>;
+  let templateRefMock: jasmine.SpyObj<TemplateRef<unknown>>;
+  let directive: LoggedinOnlyDirective;
 
   beforeEach(() => {
     authState$ = new Subject<boolean>();
-    authService = jasmine.createSpyObj('AuthService', [''], { isAuthenticated$: authState$.asObservable() });
-    viewContainerRef = jasmine.createSpyObj('ViewContainerRef', ['createEmbeddedView', 'clear']);
-    templateRef = jasmine.createSpyObj('TemplateRef', ['']);
+    viewContainerRefMock = jasmine.createSpyObj('ViewContainerRef', ['createEmbeddedView', 'clear']);
+    templateRefMock = jasmine.createSpyObj('TemplateRef', ['']);
 
-    directive = new LoggedinOnlyDirective(authService, viewContainerRef, templateRef);
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: AuthService, useValue: { isAuthenticated$: authState$.asObservable() } },
+        { provide: ViewContainerRef, useValue: viewContainerRefMock },
+        { provide: TemplateRef, useValue: templateRefMock },
+        LoggedinOnlyDirective
+      ]
+    });
+
+    directive = TestBed.inject(LoggedinOnlyDirective);
   });
 
   it('should create an embedded view if authenticated', () => {
     authState$.next(true);
-    
-    expect(viewContainerRef.createEmbeddedView).toHaveBeenCalledWith(templateRef);
+    expect(viewContainerRefMock.createEmbeddedView).toHaveBeenCalledWith(templateRefMock);
   });
 
   it('should clear the view if not authenticated', () => {
     authState$.next(false);
-
-    expect(viewContainerRef.clear).toHaveBeenCalled();
+    expect(viewContainerRefMock.clear).toHaveBeenCalled();
   });
 
   it('should clean up subscriptions on destroy', () => {
-    const spy = spyOn(authState$, 'unsubscribe');
+    const completeSpy = spyOn(directive['destroy$'], 'next');
     directive.ngOnDestroy();
-    directive['destroy$'].complete();
-
-    expect(spy).not.toHaveBeenCalled();
+    expect(completeSpy).toHaveBeenCalled();
   });
 });
