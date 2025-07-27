@@ -10,7 +10,6 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
-      
     ],
     client: {
       jasmine: {
@@ -21,7 +20,7 @@ module.exports = function (config) {
       },
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    preprocessor: {
+    preprocessors: {
       'src/**/*.js': ['coverage']
     },
     jasmineHtmlReporter: {
