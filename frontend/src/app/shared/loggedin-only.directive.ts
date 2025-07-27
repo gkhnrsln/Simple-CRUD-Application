@@ -1,4 +1,4 @@
-import { Directive, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, OnDestroy, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { AuthService } from './service/auth.service';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -6,18 +6,23 @@ import { Subject, takeUntil } from 'rxjs';
   selector: '[appLoggedinOnly]'
 })
 export class LoggedinOnlyDirective implements OnDestroy {
+  private readonly authService = inject(AuthService);
+  private readonly viewContainer = inject(ViewContainerRef);
+  private readonly template = inject<TemplateRef<unknown>>(TemplateRef);
   private readonly destroy$ = new Subject<void>();
 
-  constructor(private readonly authService: AuthService,
-              private readonly viewContainer: ViewContainerRef,
-              private readonly template: TemplateRef<unknown>) {
+  constructor() {
     this.authService.isAuthenticated$
       .pipe(takeUntil(this.destroy$))
       .subscribe(isAuthenticated => this.updateView(isAuthenticated));
   }
 
   private updateView(isAuthenticated: boolean): void {
-    isAuthenticated ? this.viewContainer.createEmbeddedView(this.template) : this.viewContainer.clear();
+    if (isAuthenticated) {
+      this.viewContainer.createEmbeddedView(this.template)
+    } else {
+      this.viewContainer.clear();
+    }
   }
 
   ngOnDestroy(): void {
