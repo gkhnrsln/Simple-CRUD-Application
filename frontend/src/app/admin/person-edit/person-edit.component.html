@@ -3,5 +3,5 @@
 <button class="btn btn-primary" routerLink="/persons"><i class="bi bi-arrow-return-left"></i> Back to persons</button>
 
 @if (person$ | async; as person) {
-    <app-person-form [person]="person" (submitPerson)="update($event)"></app-person-form>
+    <app-person-form [person]="person" (submitPerson)="update($event)" />
 }

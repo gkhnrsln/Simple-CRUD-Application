@@ -14,7 +14,7 @@
         <div class="navbar-nav ms-auto">
           <div class="container">
             @if (!auth.isAuthenticated) {
-              <app-login></app-login>
+              <app-login />
             } @else {
               Loggedin as: {{ auth.username }} <button class="btn btn-danger" (click)="auth.logout()">Logout</button>
             }

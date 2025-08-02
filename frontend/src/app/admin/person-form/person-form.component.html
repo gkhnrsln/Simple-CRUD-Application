@@ -3,18 +3,18 @@
     <div class="col-md-6">
       <label for="firstName">Firstname</label>
       <input type="text" id="firstName" formControlName="firstName" class="form-control"
-          [class]="{'is-invalid': firstName?.invalid && firstName?.touched}">
+        [class.is-invalid]="firstName?.invalid && firstName?.touched">
     </div>
     <div class="col-md-6">
       <label for="lastName">Lastname</label>
       <input type="text" id="lastName" formControlName="lastName" class="form-control"
-          [class]="{'is-invalid': lastName?.invalid && lastName?.touched}">
+        [class.is-invalid]="lastName?.invalid && lastName?.touched">
     </div>
     <div class="col-12">
       <label for="mail">Mail</label>
-      <input type="email" id="mail" formControlName="mail" class="form-control" 
-        [class]="{'is-invalid': mail?.invalid && mail?.touched}">
-    </div> 
+      <input type="email" id="mail" formControlName="mail" class="form-control"
+        [class.is-invalid]="mail?.invalid && mail?.touched">
+    </div>
     <div class="col-12">
       <label for="phone">Phone</label>
       <input type="text" id="phone" formControlName="phone" class="form-control">
@@ -22,7 +22,7 @@
     <div class="col-12">
       <label for="birthday">Birthday</label>
       <input type="date" id="birthday" formControlName="birthday" class="form-control"
-      [class]="{'is-invalid': birthday?.invalid && birthday?.touched}">
+        [class.is-invalid]="birthday?.invalid && birthday?.touched">
     </div>
     <div class="col-12">
       <button class="btn btn-primary" type="submit" [disabled]="!personForm.valid">Submit</button>
