@@ -9,6 +9,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use signals for state management
 - Implement lazy loading for feature routes
 - Use `NgOptimizedImage` for all static images.
+- Use self-closing tags for components and directives
 ## Components
 - Keep components small and focused on a single responsibility
 - Use `input()` and `output()` functions instead of decorators
