@@ -8,9 +8,8 @@ describe('PersonFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ PersonFormComponent ]
-    })
-    .compileComponents();
+      imports: [PersonFormComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -37,7 +36,7 @@ describe('PersonFormComponent', () => {
       lastName: 'Jones',
       birthday: new Date('1990-01-01'),
       mail: 'bob@abc.com',
-      phone: '+9876543210'
+      phone: '+9876543210',
     };
 
     fixture.componentRef.setInput('person', mockPerson);
@@ -46,7 +45,34 @@ describe('PersonFormComponent', () => {
     expect(component.firstName?.value).toBe('Bob');
     expect(component.lastName?.value).toBe('Jones');
     expect(component.mail?.value).toBe('bob@abc.com');
-    expect(component.personForm.get('birthday')?.value).toBe(mockPerson.birthday);
+    expect(component.personForm.get('birthday')?.value).toBe(
+      mockPerson.birthday,
+    );
   });
 
+  it('should emit submitPerson with correct values on submit', () => {
+    const emitSpy = spyOn(component.submitPerson, 'emit');
+    component.personForm.setValue({
+      firstName: 'Alice',
+      lastName: 'Smith',
+      birthday: new Date('2000-05-15'),
+      mail: 'alice@abc.com',
+      phone: '+49123456789',
+    });
+
+    fixture.componentRef.setInput('person', undefined);
+
+    component.onSubmit();
+
+    expect(emitSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        firstName: 'Alice',
+        lastName: 'Smith',
+        birthday: new Date('2000-05-15'),
+        mail: 'alice@abc.com',
+        phone: '+49123456789',
+        id: jasmine.any(String),
+      }),
+    );
+  });
 });
