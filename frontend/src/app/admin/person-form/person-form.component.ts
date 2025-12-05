@@ -1,5 +1,10 @@
-import {Component, input, output, OnChanges } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Component, input, output, OnChanges } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Person } from 'src/app/model/person';
 import { birthdayValidator } from 'src/app/shared/validators/birthdayValidator';
 
@@ -7,15 +12,13 @@ import { birthdayValidator } from 'src/app/shared/validators/birthdayValidator';
   selector: 'app-person-form',
   templateUrl: './person-form.component.html',
   styleUrls: ['./person-form.component.scss'],
-  imports: [
-    ReactiveFormsModule
-  ]
+  imports: [ReactiveFormsModule],
 })
 export class PersonFormComponent implements OnChanges {
   readonly person = input<Person | undefined>();
   readonly submitPerson = output<Person>();
 
-  ngOnChanges() :void {
+  ngOnChanges(): void {
     if (this.person()) {
       this.setFormValues(this.person()!);
     }
@@ -24,25 +27,22 @@ export class PersonFormComponent implements OnChanges {
   personForm = new FormGroup({
     firstName: new FormControl('John', {
       nonNullable: true,
-      validators: Validators.required
+      validators: Validators.required,
     }),
     lastName: new FormControl('Doe', {
       nonNullable: true,
-      validators: Validators.required
+      validators: Validators.required,
     }),
     birthday: new FormControl(new Date(), {
       nonNullable: true,
-      validators: [
-        Validators.required,
-        birthdayValidator()
-      ]
+      validators: [Validators.required, birthdayValidator()],
     }),
     mail: new FormControl('example@abc.com', {
       nonNullable: true,
-      validators: Validators.email
+      validators: Validators.email,
     }),
     phone: new FormControl('+0123456789', {
-      nonNullable: true
+      nonNullable: true,
     }),
   });
 
@@ -67,7 +67,7 @@ export class PersonFormComponent implements OnChanges {
 
     const newPerson: Person = {
       id: this.person()?.id ?? Date.now().toString(),
-      ...formValue
+      ...formValue,
     };
     this.submitPerson.emit(newPerson);
   }
