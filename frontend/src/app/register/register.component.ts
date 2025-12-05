@@ -1,33 +1,45 @@
-import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { UserService } from '../shared/service/user.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/service/auth.service';
 import { ToasterService } from '../shared/service/toaster.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   imports: [ReactiveFormsModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly toastService = inject(ToasterService);
-  private readonly strongPasswordRegx: RegExp = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-  title = 'Register';
-  errorMessage: string | null = null;
-  usernameTakenError: string | null = null;
+  private readonly strongPasswordRegx: RegExp =
+    /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  readonly errorMessage = signal<string | null>(null);
+  readonly usernameTakenError = signal<string | null>(null);
 
-  registerForm = new FormGroup({
+  readonly registerForm = new FormGroup({
     userName: new FormControl('', {
       nonNullable: true,
       validators: [
         Validators.required,
         Validators.minLength(3),
-        Validators.pattern('^[a-zA-Z0-9]+$')
+        Validators.pattern('^[a-zA-Z0-9]+$'),
       ],
     }),
     password: new FormControl('', {
@@ -35,33 +47,33 @@ export class RegisterComponent {
       validators: [
         Validators.required,
         Validators.minLength(8),
-        Validators.pattern(this.strongPasswordRegx)
-      ]
+        Validators.pattern(this.strongPasswordRegx),
+      ],
     }),
   });
 
-  onSubmit() {
+  async onSubmit(): Promise<void> {
     if (this.registerForm.invalid) {
       return;
     }
 
-    const {userName, password} = this.registerForm.getRawValue();
-    this.userService.register(userName, password).subscribe({
-      next: () => {
-        this.toastService.show('Success', 'You have been registered.');
-        this.authService.login(userName, password).subscribe(
-          () => {
-            this.router.navigate(['/home']);
-          }
-        );
-      }, error: (err) => {
-        if (err.status === 409) {
-          this.usernameTakenError = err.error.error;
-        } else {
-          this.errorMessage = err.error.error;
-        }
-        this.toastService.show('Error', err.error.error);
+    const { userName, password } = this.registerForm.getRawValue();
+
+    try {
+      await firstValueFrom(this.userService.register(userName, password));
+      this.toastService.show('Success', 'You have been registered.');
+
+      await firstValueFrom(this.authService.login(userName, password));
+      await this.router.navigate(['/home']);
+    } catch (err: unknown) {
+      const e = err as { status?: number; error?: { error?: string } };
+      const message = e.error?.error ?? 'Unexprected error.';
+      if (e.status === 409) {
+        this.usernameTakenError.set(message);
+      } else {
+        this.errorMessage.set(message);
       }
-    });
+      this.toastService.show('Error', message);
+    }
   }
 }
