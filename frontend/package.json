@@ -36,7 +36,7 @@
     "@angular/compiler-cli": "21.1.5",
     "@types/bootstrap": "5.2.10",
     "@types/jasmine": "5.1.13",
-    "@types/node": "24.10.1",
+    "@types/node": "24.10.13",
     "angular-eslint": "21.0.1",
     "codecov": "3.8.3",
     "eslint": "9.39.3",
