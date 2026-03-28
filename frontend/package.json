@@ -37,7 +37,7 @@
     "@types/bootstrap": "5.2.10",
     "@types/jasmine": "6.0.0",
     "@types/node": "24.10.13",
-    "angular-eslint": "21.0.1",
+    "angular-eslint": "21.3.1",
     "codecov": "3.8.3",
     "eslint": "9.39.3",
     "jasmine-core": "5.13.0",
