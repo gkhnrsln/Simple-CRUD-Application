@@ -39,7 +39,7 @@
     "@types/node": "24.10.13",
     "angular-eslint": "21.3.1",
     "codecov": "3.8.3",
-    "eslint": "9.39.3",
+    "eslint": "9.39.4",
     "jasmine-core": "5.13.0",
     "karma": "6.4.4",
     "karma-chrome-launcher": "3.2.0",
