@@ -2,11 +2,9 @@ name: Angular Build
 
 on:
   push:
-    branches: [ "main" ]
     paths:
       - 'frontend/**'
   pull_request:
-    branches: [ "main" ]
     paths:
       - 'frontend/**'
 
