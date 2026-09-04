@@ -34,7 +34,7 @@
     "@angular/build": "21.2.7",
     "@angular/cli": "21.2.7",
     "@angular/compiler-cli": "21.2.9",
-    "@types/bootstrap": "5.2.10",
+    "@types/bootstrap": "5.2.11",
     "@types/jasmine": "6.0.0",
     "@types/node": "24.12.2",
     "angular-eslint": "21.3.1",
