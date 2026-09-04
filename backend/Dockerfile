@@ -6,7 +6,7 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 go build -o app .
 
-FROM alpine:3.23.4
+FROM alpine:3.24.1
 COPY --from=builder /go/src/app .
 EXPOSE 8080
 CMD ["./app"]
