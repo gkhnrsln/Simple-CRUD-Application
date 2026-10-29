@@ -1,4 +1,4 @@
-FROM node:24.15.0 AS build
+FROM node:24.22.2 AS build
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
